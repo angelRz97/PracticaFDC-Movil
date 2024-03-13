@@ -1,14 +1,18 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:crypto/crypto.dart';
 
 class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => LoginState();
 }
 
-///Clase empleada para mantener el estado para el widget Login
 class LoginState extends State<Login> {
+
+  bool passNotVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +38,10 @@ class LoginState extends State<Login> {
               ),
             ),
             Positioned(
-              top: 350, // Ajusta la posición vertical según sea necesario
+              top: 350,
               left: 0,
               right: 0,
-              child: login(), // Aquí llamamos a la función que crea el formulario de inicio de sesión
+              child: login(),
             ),
           ],
         ),
@@ -49,38 +53,50 @@ class LoginState extends State<Login> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
           margin: EdgeInsets.only(left: 50, right: 50),
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-              color: Color.fromRGBO(0, 70, 175, 1),
+              color: Color(0xFF0750d8),
               width: 2,
             ),
           ),
           child: TextField(
             decoration: InputDecoration(
               hintText: 'Usuario',
+              prefixIcon: Icon(Icons.person),
               border: InputBorder.none,
+              filled: true,
+              fillColor: Colors.grey[400]
             ),
           ),
         ),
         SizedBox(height: 10),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
           margin: EdgeInsets.only(left: 50, right: 50),
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-              color: Color.fromRGBO(0, 70, 175, 1),
+              color: Color(0xFF0750d8),
               width: 2,
             ),
           ),
           child: TextField(
-            obscureText: true,
+            obscureText: passNotVisible,
             decoration: InputDecoration(
-              hintText: 'Contraseña',
+              hintText: 'Clave',
+              prefixIcon: Icon(Icons.lock),
+              suffixIcon: IconButton(
+                icon: Icon(passNotVisible ? Icons.visibility_off : Icons.visibility),
+                onPressed: () {
+                  setState(() {
+                    passNotVisible = !passNotVisible;
+                  });
+                },
+              ),
               border: InputBorder.none,
+              filled: true,
+              fillColor: Colors.grey[400],
             ),
           ),
         ),
@@ -88,28 +104,38 @@ class LoginState extends State<Login> {
         Container(
           margin: EdgeInsets.only(left: 50, right: 50),
           decoration: BoxDecoration(
-            color: Color.fromRGBO(0, 70, 175, 1),
+            color: Color(0xFF0750d8),
           ),
           child: ElevatedButton(
             onPressed: () {
               //logica para hacer el login
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(0, 70, 175, 1)),
-            child: Center(
-              child: Text(
-                'ACCESO',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  height: 3
-                ),
-              ),
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0750d8)),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'ACCEDER  ',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            height: 3,
+          ),
+        ),
+        Icon(Icons.login_outlined, color: Colors.white), // Icono después del texto
+      ],
+    ),
           ),
         ),
       ],
     );
+  }
+
+  String hashPassword(String password) {
+    var pass = utf8.encode(password);
+    String passHex = sha256.convert(pass) as String;
+    return passHex;
   }
 }
 
