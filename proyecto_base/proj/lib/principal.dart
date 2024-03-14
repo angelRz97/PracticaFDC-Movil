@@ -2,6 +2,7 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:proj/intereses/interes.dart';
+import 'package:proj/ofertas.dart';
 import '/s1.dart';
 import '/s2.dart';
 import '/s3.dart';
@@ -78,7 +79,7 @@ class _principal extends State<Principal> {
       return Container(child: Center(child: Text("pagina 1")));
     }
     if (index == 1) {
-      return Container(child: Center(child: Text("pagina 2")));
+      return Ofertas();
     }
     if (index == 2) {
       return Container(child: Center(child: Text("pagina 3")));
