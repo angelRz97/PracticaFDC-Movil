@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/login.dart';
 import 'principal.dart';
 
 void main() {
@@ -12,8 +13,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/principal',
+        initialRoute: '/login',
         routes: {
+          "/login": (BuildContext context) => Login(),
           '/principal': (BuildContext context) => Principal(),
         });
   }
