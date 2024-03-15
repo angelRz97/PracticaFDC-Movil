@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:proj/principal.dart';
+import 'package:proj/utils/conexion_api.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,7 +13,6 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-
   bool contrasenaNoVisible = true;
   String usuario = "";
   String contrasena = "";
@@ -76,13 +76,12 @@ class LoginState extends State<Login> {
         Container(
           margin: EdgeInsets.only(left: 50, right: 50),
           decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(
-              color: Color(0xFF0750d8),
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(10)
-          ),
+              color: Colors.white,
+              border: Border.all(
+                color: Color(0xFF0750d8),
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10)),
           child: TextFormField(
             controller: usuarioController,
             decoration: InputDecoration(
@@ -90,12 +89,17 @@ class LoginState extends State<Login> {
               prefixIcon: Icon(Icons.person),
               filled: true,
               fillColor: Colors.grey[400],
-              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0750d8), width: 5), borderRadius: BorderRadius.circular(10)),
-              border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0750d8), width: 5), borderRadius: BorderRadius.circular(10)),
-              errorStyle: TextStyle(color: Color.fromARGB(255, 255, 0, 0), fontSize: 13),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF0750d8), width: 5),
+                  borderRadius: BorderRadius.circular(10)),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF0750d8), width: 5),
+                  borderRadius: BorderRadius.circular(10)),
+              errorStyle: TextStyle(
+                  color: Color.fromARGB(255, 255, 0, 0), fontSize: 13),
             ),
             validator: (value) {
-              if(value!.isEmpty) {
+              if (value!.isEmpty) {
                 return "Campo Vacio";
               } else {
                 setState(() {
@@ -111,13 +115,12 @@ class LoginState extends State<Login> {
         Container(
           margin: EdgeInsets.only(left: 50, right: 50),
           decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(
-              color: Color(0xFF0750d8),
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(10)
-          ),
+              color: Colors.white,
+              border: Border.all(
+                color: Color(0xFF0750d8),
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10)),
           child: TextFormField(
             controller: contrasenaController,
             obscureText: contrasenaNoVisible,
@@ -127,18 +130,24 @@ class LoginState extends State<Login> {
               hintText: 'Clave',
               prefixIcon: Icon(Icons.lock),
               suffixIcon: IconButton(
-                icon: Icon(contrasenaNoVisible ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(contrasenaNoVisible
+                    ? Icons.visibility_off
+                    : Icons.visibility),
                 onPressed: () {
                   setState(() {
                     contrasenaNoVisible = !contrasenaNoVisible;
                   });
                 },
               ),
-              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0750d8), width: 5), borderRadius: BorderRadius.circular(10)),
-              border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0750d8), width: 5), borderRadius: BorderRadius.circular(10)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF0750d8), width: 5),
+                  borderRadius: BorderRadius.circular(10)),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF0750d8), width: 5),
+                  borderRadius: BorderRadius.circular(10)),
             ),
             validator: (value) {
-              if(value!.isEmpty) {
+              if (value!.isEmpty) {
                 return "Campo Vacio";
               } else {
                 setState(() {
@@ -156,13 +165,29 @@ class LoginState extends State<Login> {
             color: Color(0xFF0750d8),
           ),
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               formKey.currentState!.validate();
-              if(usuarioCorrecto && contrasenaCorrecta) {
-                formKey.currentState!.save();
-                hashPassword(contrasenaController.text);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Principal()),);
+              switch (await ConexionApi.login(usuarioController.text,
+                  hashPassword(contrasenaController.text))) {
+                case 1:
+                  print("comprobación correcta");
+
+                  break;
+                case 2:
+                  print("muerte");
+                  break;
+                case 0:
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Principal()),
+                  );
+                  break;
               }
+              // if(usuarioCorrecto && contrasenaCorrecta) {
+              //   formKey.currentState!.save();
+              //   hashPassword(contrasenaController.text);
+              //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Principal()),);
+              // }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0750d8)),
             child: Row(
@@ -177,7 +202,8 @@ class LoginState extends State<Login> {
                     height: 3,
                   ),
                 ),
-                Icon(Icons.login_outlined, color: Colors.white), // Icono después del texto
+                Icon(Icons.login_outlined,
+                    color: Colors.white), // Icono después del texto
               ],
             ),
           ),
@@ -192,4 +218,3 @@ class LoginState extends State<Login> {
     return passHex.toString();
   }
 }
-

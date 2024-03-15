@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   curved_labeled_navigation_bar: ^2.0.2
   crypto: ^3.0.3
+  http: ^1.2.1
+  encrypt: ^5.0.3
 
 dev_dependencies:
   flutter_test:
