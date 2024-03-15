@@ -14,7 +14,4 @@ class Formacion{
 
   Formacion(this.id, this.descripcion, this.requisitos, this.fechaInicio, this.fechaFin, this.coste, this.imagen, this.fecha);
 
-
-
-
 }
