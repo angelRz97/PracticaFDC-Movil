@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+// Model de usuario
 class Usuario {
   int id;
   String usuario;
@@ -8,9 +9,9 @@ class Usuario {
   String apellidos;
   String email;
   String telefono;
-  Enum estado;
+  Estado estado;
   DateTime actualizacion;
-  Uint8List imagen;
+  Uint8List? imagen;
 
   Usuario(
       {required this.id,
@@ -24,3 +25,5 @@ class Usuario {
       required this.actualizacion,
       required this.imagen});
 }
+
+enum Estado { EMPLEADO, DESEMPLEADO }

@@ -171,7 +171,6 @@ class LoginState extends State<Login> {
                   hashPassword(contrasenaController.text))) {
                 case 1:
                   print("comprobación correcta");
-
                   break;
                 case 2:
                   print("muerte");
