@@ -3,8 +3,10 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-import 'package:proj/ofertas.dart';
-import '../interes.dart';
+
+import '../modelos/interes.dart';
+import 'ofertas.dart';
+
 
 /// Clase contenedora de la pantalla principal de la aplicación
 class Principal extends StatefulWidget {

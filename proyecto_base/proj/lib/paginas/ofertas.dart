@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:proj/intereses/etiqueta.dart';
-import 'package:proj/intereses/ofertaDTO.dart';
+
+import '../modelos/etiqueta.dart';
+import '../modelos/ofertaDTO.dart';
+
 
 /// Clase contenedora de la pantalla de ofertas de la aplicación
 class Ofertas extends StatefulWidget {
