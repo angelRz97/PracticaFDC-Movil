@@ -1,0 +1,226 @@
+
+GenericoDTOsalida {
+
+	List<String> errores;
+	Timestamp tiempo;
+}
+
+
+OfertaDTO {
+
+	int id;
+	int vacantes;
+
+	String empresa;
+	String titulo;
+	String descripcion;
+
+	ArrayList<Bytes> imagen;
+	ArrayList<EtiquetasDTO> requisitos;
+
+	Enum estado;
+}
+
+OfertasDTOsalida {
+	
+	ArrayList<OfertasDTO> ofertas;
+
+	List<String> errores;
+	Timestamp tiempo;
+}
+
+OfertaDTOsalida {
+	
+	OfertaDTO oferta;
+
+	List<String> errores;
+	Timestamp tiempo; 
+}
+
+NovedadesDTOsalida {
+
+	ArrayList<OfertaDTO> ofertas;
+	ArrayList<OfertaDTO> formaciones;
+}
+
+AccesoDTO {
+
+	String nombre;
+	String contrasena;
+}
+
+UsuarioDTO {
+	
+	int id;
+	String usuario;
+	String contrasena;
+	String nombre;
+	String apellidos;
+	String email;
+	String telefono;
+	Enum estado {"DESEMPLEADO" || "EMPLEADO"};
+	DateTime actualizacion;
+
+	ArrayList<EtiquetasDTO> intereses;
+}
+
+UsuarioDTOsalida {
+	
+	UsuarioDTO usuario;
+	this.usuario.contrasena = "";
+
+	List<String> errores;
+	Timestamp tiempo;
+}
+
+UsuariosDTOsalida {
+	
+	ArrayList<UsuarioDTO> usuarios;
+
+	List<String> errores;
+	Timestamp tiempo;
+}
+
+EtiquetasDTOsalida {
+	
+	ArrayList<EtiquetasDTO> intereses;
+
+	List<String> errores;
+	Timestamp tiempo;
+}
+
+EtiquetaDTO {
+	
+	int id;
+	String nombre;
+}
+
+EtiquetasDTOsalida {
+	
+	ArrayList<EtiquetasDTO> etiquetas;
+
+	List<String> errores;
+	Timestamp tiempo;
+}
+
+FormacionDTO {
+
+	int id;
+	int vacantes;
+	int coste;
+
+	String empresa;
+	String titulo;
+	String descripcion;
+
+	ArrayList<Bytes> imagen;
+	ArrayList<EtiquetasDTO> requisitos;
+
+	Enum estado;
+
+	Date inicio;
+	Date fin;
+}
+
+FormacionesDTOsalida {
+	
+	ArrayList<FormacionDTO> formaciones;
+
+	List<String> errores;
+	Timestamp tiempo; 
+}
+
+FormacionesDTOsalida {
+	
+	FormacionDTO formacion;
+
+	List<String> errores;
+	Timestamp tiempo; 
+}
+
+-------------------------------------------------------------------------------------------------
+
+// Comprueba la existencia del usuario en BD
+URL: api/login
+METODO: GET
+DTO entrada: AccesoDTO acceso
+DTO salida: GenericoDTOsalida
+
+// Devuelve una objeto NovedadesDTOsalida con una lista de ofertas y formaciones
+URL: api/novedades
+METODO: GET
+DTO entrada: void
+DTO salida: NovedadesDTOsalida
+
+// 
+URL: api/etiquetas
+METODO: GET
+DTO entrada: void
+DTO salida: EtiquetasDTOsalida
+
+URL: api/usuarios/{idUsuario}
+METODO: GET
+DTO entrada: int idUsuario
+DTO salida: UsuarioDTOsalida
+
+// Actualiza los datos de un usuario
+URL: api/usuarios
+METODO: PUT
+DTO entrada: UsuarioDTO
+DTO salida: UsuarioDTOsalida
+
+URL: /api/usuarios/{idUsuario}/intereses 
+METODO: GET
+DTO entrada: int idUsuario
+DTO salida: EtiquetasDTOsalida
+
+URL: /api/usuarios/{idUsuario}/intereses 
+METODO: POST
+DTO entrada: int idUsuario
+DTO salida: GenericoDTOsalida
+
+URL: /api/usuarios/{idUsuario}/intereses 
+METODO: DELETE
+DTO entrada: int idUsuario
+DTO salida: GenericoDTOsalida
+
+URL: /api/ofertas 
+METODO: GET
+DTO entrada: void
+DTO salida: OfertasDTOsalida
+
+URL: /api/ofertas/{idOferta}
+METODO: GET
+DTO entrada: int idOferta
+DTO salida: OfertaDTOsalida
+
+URL: /api/ofertas/{idOferta}/inscripciones ----- ???
+METODO: GET
+DTO entrada: int idOferta, int idUsuario
+DTO salida: UsuariosDTOsalida
+
+// Añade un usuario a la oferta
+URL: /api/ofertas/{idOferta}/inscripciones	----- ???
+METODO: POST
+DTO entrada: int idOferta
+DTO salida: GenericoDTOsalida
+
+URL: /api/formaciones 
+METODO: GET
+DTO entrada: void
+DTO salida: FormacionesDTOsalida
+
+URL: /api/formaciones/{idFormacion}
+METODO: GET
+DTO entrada: int idFormacion
+DTO salida: FormacionDTOsalida
+
+URL: /api/formaciones/{idFormacion}/inscripciones ----- ???
+METODO: GET
+DTO entrada: int idFormacion, int idUsuario
+DTO salida: UsuariosDTOsalida
+
+URL: /api/formaciones/{idFormacion}/inscripciones	----- ???
+METODO: POST
+DTO entrada: int idFormacion
+DTO salida: GenericoDTOsalida
