@@ -21,6 +21,7 @@ class LoginState extends State<Login> {
 
   bool usuarioCorrecto = false;
   bool contrasenaCorrecta = false;
+  bool errorLogin = false;
 
   final formKey = GlobalKey<FormState>();
 
@@ -170,7 +171,7 @@ class LoginState extends State<Login> {
               switch (await ConexionApi.login(usuarioController.text,
                   hashPassword(contrasenaController.text))) {
                 case 1:
-                  print("comprobación correcta");
+                  //print("comprobación correcta");
                   break;
                 case 2:
                   print("muerte");

@@ -5,11 +5,11 @@ import 'package:proj/models/usuario.dart';
 import 'package:proj/utils/controlador.dart';
 import 'package:proj/utils/controlador_encriptacion.dart';
 
-// Clase para realizar las peticiones a la API
+/// Clase para realizar las peticiones a la API
 class ConexionApi {
   static String url = "http://10.0.2.2:8080/";
 
-  // Devuelve un entero en función del resultado de la petición de login a la api
+  /// Devuelve un entero en función del resultado de la petición de login a la api
   static Future<int> login(String email, String contrasena) async {
     String peticion = "${url}api/login";
     String emailEncriptado = ControladorEncriptacion.ecriptar(email);
@@ -33,12 +33,17 @@ class ConexionApi {
       } else {
         Controlador.usuario = Usuario(
             id: datosRespuesta["usuario"]["id"],
-            usuario: datosRespuesta["usuario"]["usuario"],
+            usuario: ControladorEncriptacion.desencriptar(
+                datosRespuesta["usuario"]["usuario"]),
             contrasena: datosRespuesta["usuario"]["contrasena"],
-            nombre: datosRespuesta["usuario"]["nombre"],
-            apellidos: datosRespuesta["usuario"]["apellidos"],
-            email: datosRespuesta["usuario"]["email"],
-            telefono: datosRespuesta["usuario"]["telefono"],
+            nombre: ControladorEncriptacion.desencriptar(
+                datosRespuesta["usuario"]["nombre"]),
+            apellidos: ControladorEncriptacion.desencriptar(
+                datosRespuesta["usuario"]["apellidos"]),
+            email: ControladorEncriptacion.desencriptar(
+                datosRespuesta["usuario"]["email"]),
+            telefono: ControladorEncriptacion.desencriptar(
+                datosRespuesta["usuario"]["telefono"]),
             estado: datosRespuesta["usuario"]["estado"] == "EMPLEADO"
                 ? Estado.EMPLEADO
                 : Estado.DESEMPLEADO,
