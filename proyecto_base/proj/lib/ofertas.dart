@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proj/intereses/etiqueta.dart';
 import 'package:proj/intereses/interes.dart';
 import 'package:proj/intereses/ofertas.dart';
 import '/principal.dart';
@@ -74,50 +75,61 @@ class _OfertasState extends State<Ofertas> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Detalle formacion",style: TextStyle(fontWeight: FontWeight.bold,)),
+          title: Text("DETALLE FORMACION",style: TextStyle(fontWeight: FontWeight.bold,)),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Titulo",style: TextStyle(fontWeight: FontWeight.bold,)),
+                Row(
+                  children: [
+                    Text("TITULO",style: TextStyle(fontWeight: FontWeight.bold,)),
+                    Spacer(),
+                    Text("VACANTES: "+interestName.vacantes.toString(),style: TextStyle(fontWeight: FontWeight.bold,),),
+                  ],
+                ),
                 Container(
                   width: 300,
                   height: 50,
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 161, 166, 235),
-                    borderRadius: BorderRadius.circular(20)
+                    color: Color.fromARGB(255, 185, 185, 185),
+                    borderRadius: BorderRadius.circular(10)
                   ),
-                  child: Text(interestName.titulo),
+                  child: SingleChildScrollView(child: Text(interestName.titulo, textAlign: TextAlign.justify)),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Text("Descripcion",style: TextStyle(fontWeight: FontWeight.bold,)),
+                Text("DESCRIPCION",style: TextStyle(fontWeight: FontWeight.bold,)),
                 Container(
                   width: 300,
                   height: 150,
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 161, 166, 235),
-                    borderRadius: BorderRadius.circular(20)
+                    color: Color.fromARGB(255, 185, 185, 185),
+                    borderRadius: BorderRadius.circular(10)
                   ),
-                  child: Text(interestName.descripcion),
+                  child: SingleChildScrollView(child: Text(interestName.descripcion, textAlign: TextAlign.justify)),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Text("Requisitos",style: TextStyle(fontWeight: FontWeight.bold,)),
+                Text("REQUISITOS",style: TextStyle(fontWeight: FontWeight.bold,)),
                 Container(
                   width: 300,
                   height: 150,
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 161, 166, 235),
-                    borderRadius: BorderRadius.circular(20)
+                    color: Color.fromARGB(255, 185, 185, 185),
+                    borderRadius: BorderRadius.circular(10)
                   ),
-                  child: Text(interestName.requisitos),
-                )
+                  child: SingleChildScrollView(child: Text(interestName.requisitos, textAlign: TextAlign.justify)),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text("INTERESES",style: TextStyle(fontWeight: FontWeight.bold,)),
+                listaEtiquetas(),
               ],
             ),
           ),
@@ -137,6 +149,25 @@ class _OfertasState extends State<Ofertas> {
           ],
         );
       },
+    );
+  }
+
+
+  Widget listaEtiquetas(){
+    return Wrap(
+      spacing: MediaQuery.of(context).size.width * 0.02,
+      runSpacing: 10.0,
+      children: [
+        for(int i = etiquetas.length-1; i>=0 ; i--)
+        Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(25, 5, 255, 1),
+                    borderRadius: BorderRadius.circular(5)
+                  ),
+                  child: Text(etiquetas[i].nombre, style: TextStyle(color: Colors.white),),
+                ),
+      ]
     );
   }
 }    
