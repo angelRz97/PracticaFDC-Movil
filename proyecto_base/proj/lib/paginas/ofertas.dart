@@ -136,7 +136,7 @@ class _OfertasState extends State<Ofertas> {
                 /// Etiquetas de las ofertas
                 Text("INTERESES",style: TextStyle(fontWeight: FontWeight.bold,)),
                 /// Lista provisional de etiquetas a espera de la API
-                listaEtiquetas(listaIntereses),
+                listaEtiquetas(interestName.intereses),
               ],
             ),
           ),
