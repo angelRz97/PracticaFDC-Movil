@@ -3,10 +3,14 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
+import '../construirPerfil.dart';
 import '../interes.dart';
 
 /// Clase contenedora de la pantalla principal de la aplicación
 class Principal extends StatefulWidget {
+  final String usuario;
+  Principal({required this.usuario});
+
   @override
   State<StatefulWidget> createState() => _principal();
 }
@@ -24,6 +28,12 @@ class _principal extends State<Principal> {
 
   /// Lista general de intereses
   List<Interes> intereses = listaIntereses;
+
+  /// Lista de intereses que has seleccionado
+  List<Interes> interesesSeleccionados = [];
+
+  /// Texto default del estado del perfil
+  String estado = "DESEMPLEADO";
 
   @override
   Widget build(BuildContext context) {
@@ -120,68 +130,193 @@ class _principal extends State<Principal> {
 
   /// Widget paginaUsuario() que muestra la pagina correspondiente al perfil del usuario
   Widget paginaUsuario() {
-    return Column(
-      children: <Widget>[
-        /// Crear barra de búsqueda
+    if(widget.usuario == "admin@admin") {
+      return Column(
+        children: [ 
         Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromRGBO(217, 217, 217, 1),
-                style: BorderStyle.solid,
-                width: 1.0,
-              ),
-
-              /// Setear color de la barra
-              color: const Color.fromRGBO(217, 217, 217, 1),
-              borderRadius: BorderRadius.circular(20.0),
+          margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: 'Buscar',
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: const BorderSide(color: Colors.red))
             ),
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: TextField(
-              /// Llamar al controlador
-              controller: controller,
-
-              /// Setear icono, texto y forma de la barra
-              decoration: InputDecoration(prefixIcon: const Icon(Icons.search), hintText: 'Buscar', border: OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
-
-              /// Setear función de la barra
-              onChanged: searchInteres,
-            )),
-
-        /// Mostrar lista general de intereses
-        Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-
-            /// Setear color de fondo de la lista
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromRGBO(217, 217, 217, 1),
-                style: BorderStyle.solid,
-                width: 1.0,
-              ),
-              color: const Color.fromRGBO(217, 217, 217, 1),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-
-            /// Limitar tamaño de la lista
-            child: LimitedBox(
-              maxHeight: 170,
-              child: ListView.builder(
-                /// Cambiar efecto del overscroll en la lista
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: intereses.length,
-                itemBuilder: (context, index) {
-                  final interes = intereses[index];
-                  return ListTile(
-                    leading: const Icon(Icons.person),
-                    title: Text(interes.nombre),
-                  );
-                },
-              ),
-            ))
-      ],
-    );
+            onChanged: searchInteres,
+          ),  
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: const Icon(Icons.person),
+                title: Text(widget.usuario),
+              );
+            },
+          ),
+        ),
+        ],
+      );
+    } else {
+      return ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+          const SizedBox(height: 30),
+          /// Funcion para construir la imagen y poder editar la imagen
+          construirPerfil(),
+          const SizedBox(height: 24),
+          /// Funcion para construir el apartado de estado e intereses
+          construirNombre(widget.usuario),
+        ],
+      );
+    }
   }
+
+  Widget construirNombre(nombre) => Column(
+    children: [
+      Text(nombre, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+      const SizedBox(height: 4),
+      Text(nombre, style: const TextStyle(color: Colors.grey, fontSize: 18)),
+      const SizedBox(height: 20),
+      Container(
+        padding: const EdgeInsets.only(left: 120, right: 120, top: 10, bottom: 10),
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(25, 5, 255, 1),
+        ),
+        child: const Text(
+          'ESTADO',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      const SizedBox(height: 10),
+      Container(
+        padding: const EdgeInsets.only(left: 35, right: 20),
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 206, 206, 206),
+        ),
+        child: DropdownButton<String>(
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          value: estado,
+          onChanged: (String? newValue) {
+            setState(() {
+              estado = newValue!;
+            });
+          },
+          style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+          icon: const Icon(Icons.arrow_drop_down, color: Color.fromRGBO(25, 5, 255, 1)),
+          iconSize: 50,
+          items: ['DESEMPLEADO', 'CON EMPLEO'].map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+      ),
+      const SizedBox(height: 20),
+      Container(
+        padding: const EdgeInsets.only(left: 103, right: 103, top: 10, bottom: 10),
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(25, 5, 255, 1),
+        ),
+        child: const Text(
+          'INTERESES',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      Container(
+        height: 40,
+        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: const Color.fromRGBO(217, 217, 217, 1),
+            style: BorderStyle.solid,
+            width: 1.0,
+          ),
+          /// Setear color de la barra
+          color: const Color.fromRGBO(217, 217, 217, 1),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: TextField(
+          /// Llamar al controlador
+          controller: controller,
+          /// Setear icono, texto y forma de la barra
+          decoration: InputDecoration(prefixIcon: const Icon(Icons.search), contentPadding: const EdgeInsets.symmetric(vertical: 8), border: OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
+          /// Setear función de la barra
+          onChanged: searchInteres,
+        )
+      ),
+      Container(
+        margin: const EdgeInsets.fromLTRB(30, 0, 30, 10),
+        /// Setear color de fondo de la lista
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: const Color.fromRGBO(217, 217, 217, 1),
+            style: BorderStyle.solid,
+            width: 1.0,
+          ),
+          color: const Color.fromRGBO(217, 217, 217, 1),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        /// Limitar tamaño de la lista
+        child: LimitedBox(
+          maxHeight: 170,
+          child: ListView.builder(
+            /// Cambiar efecto del overscroll en la lista
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: intereses.length,
+            itemBuilder: (context, index) {
+              final interes = intereses[index];
+              return ListTile(
+                leading: const Icon(Icons.person),
+                title: Text(interes.nombre),
+                onTap: () {
+                  setState(() {
+                    if (interesesSeleccionados.contains(interes)) {
+                      interesesSeleccionados.remove(interes);
+                    } else {
+                      interesesSeleccionados.add(interes);
+                    }
+                  });
+                },
+              );
+            },
+          ),
+        )
+      ),
+      Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        alignment: WrapAlignment.center,
+        spacing: 10.0,
+        runSpacing: 8.0,
+        children: interesesSeleccionados.map((interest) {
+          bool seleccionado = interesesSeleccionados.contains(interest);
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            decoration: BoxDecoration(
+              color: seleccionado ? const Color.fromRGBO(25, 5, 255, 1) : Colors.grey[700],
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Text(
+              interest.nombre,
+              style: const TextStyle(color: Colors.white),
+            ),
+          );
+        }).toList(),
+      ),
+      const SizedBox(height: 20),
+    ],
+  );
 
   /// Método searchInteres(String) para buscar un elemento en la lista general de intereses
   void searchInteres(String query) {

@@ -161,7 +161,7 @@ class LoginState extends State<Login> {
                 hashPassword(contrasenaController.text);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Principal()),
+                  MaterialPageRoute(builder: (context) => Principal(usuario: usuarioController.text)),
                 );
               }
             },
