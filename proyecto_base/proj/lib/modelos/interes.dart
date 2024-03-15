@@ -1,10 +1,13 @@
+/// clase que representa una intereses
 class Interes {
   final int id;
   final String nombre;
 
+  /// Constructor
   const Interes({required this.id, required this.nombre});
 }
 
+/// Lista provisional para pruebas sin API
 const listaIntereses = [
   Interes(id: 1, nombre: 'Java 1'),
   Interes(id: 2, nombre: 'Flutter 2'),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proj/modelos/interes.dart';
 
-import '../modelos/etiqueta.dart';
 import '../modelos/ofertaDTO.dart';
 
 
@@ -136,7 +136,7 @@ class _OfertasState extends State<Ofertas> {
                 /// Etiquetas de las ofertas
                 Text("INTERESES",style: TextStyle(fontWeight: FontWeight.bold,)),
                 /// Lista provisional de etiquetas a espera de la API
-                listaEtiquetas(etiquetas),
+                listaEtiquetas(listaIntereses),
               ],
             ),
           ),
@@ -162,7 +162,7 @@ class _OfertasState extends State<Ofertas> {
   }
 
   /// Metodo que devuelve un widget con las etiquetas de la oferta
-  Widget listaEtiquetas(List<EtiquetaDTO> etiqueta){
+  Widget listaEtiquetas(List<Interes> etiqueta){
     return Wrap(
       spacing: MediaQuery.of(context).size.width * 0.02,
       runSpacing: 10.0,
