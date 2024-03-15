@@ -44,7 +44,7 @@ class _principal extends State<Principal> {
               child: Text(
                 barText,
                 textAlign: TextAlign.end,
-                style: const TextStyle(fontFamily: 'InriaSans'),
+                style: const TextStyle(fontFamily: 'InriaSans', color: Colors.white),
               ),
             )
           ],
@@ -59,10 +59,10 @@ class _principal extends State<Principal> {
         height: 60,
         index: selectedIndex,
         items: [
-          footerItem("NOVEDADES", Icon(Icons.new_releases, color: Colors.white)),
-          footerItem("OFERTAS", Icon(Icons.cases_rounded, color: Colors.white)),
-          footerItem("FORMACIÓN", Icon(Icons.school, color: Colors.white)),
-          footerItem("USUARIO", Icon(Icons.person, color: Colors.white))
+          footerItem("NOVEDADES", const Icon(Icons.new_releases, color: Colors.white)),
+          footerItem("OFERTAS", const Icon(Icons.cases_rounded, color: Colors.white)),
+          footerItem("FORMACIÓN", const Icon(Icons.school, color: Colors.white)),
+          footerItem("USUARIO", const Icon(Icons.person, color: Colors.white))
         ],
         color: const Color.fromRGBO(25, 5, 255, 1),
         buttonBackgroundColor: const Color.fromRGBO(25, 5, 255, 1),

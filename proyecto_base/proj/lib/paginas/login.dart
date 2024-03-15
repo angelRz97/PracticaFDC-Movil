@@ -80,13 +80,13 @@ class LoginState extends State<Login> {
               hintText: 'Usuario',
               prefixIcon: const Icon(
                 Icons.person,
-                color: Color.fromARGB(255, 120, 120, 120),
+                color: Color.fromRGBO(120, 120, 120, 1),
               ),
               filled: true,
               fillColor: const Color.fromRGBO(217, 217, 217, 1),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Color.fromARGB(255, 120, 120, 120), width: 2)),
-              errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Color.fromRGBO(237, 67, 55, 1), width: 1)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color.fromRGBO(120, 120, 120, 1), width: 2)),
+              errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color.fromRGBO(237, 67, 55, 1), width: 1)),
               errorStyle: const TextStyle(color: Color.fromRGBO(237, 67, 55, 1), fontFamily: 'InriaSans', fontWeight: FontWeight.bold),
             ),
             validator: (value) {
@@ -114,11 +114,11 @@ class LoginState extends State<Login> {
               hintText: 'Contraseña',
               prefixIcon: const Icon(
                 Icons.lock,
-                color: Color.fromARGB(255, 120, 120, 120),
+                color: Color.fromRGBO(120, 120, 120, 1),
               ),
               suffixIcon: IconButton(
                 icon: Icon(contrasenaNoVisible ? Icons.visibility_off : Icons.visibility),
-                color: Color.fromARGB(255, 120, 120, 120),
+                color: const Color.fromRGBO(120, 120, 120, 1),
                 onPressed: () {
                   setState(() {
                     contrasenaNoVisible = !contrasenaNoVisible;
@@ -126,8 +126,8 @@ class LoginState extends State<Login> {
                 },
               ),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Color.fromARGB(255, 120, 120, 120), width: 2)),
-              errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Color.fromRGBO(237, 67, 55, 1), width: 1)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color.fromRGBO(120, 120, 120, 1), width: 2)),
+              errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color.fromRGBO(237, 67, 55, 1), width: 1)),
               errorStyle: const TextStyle(color: Color.fromRGBO(237, 67, 55, 1), fontFamily: 'InriaSans', fontWeight: FontWeight.bold),
             ),
             validator: (value) {
