@@ -7,8 +7,10 @@ environment:
   sdk: '>=3.1.1 <4.0.0'
 
 dependencies:
+  encrypt: ^5.0.3
   flutter:
     sdk: flutter
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:
