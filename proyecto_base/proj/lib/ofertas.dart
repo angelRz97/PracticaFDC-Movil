@@ -38,7 +38,7 @@ class _OfertasState extends State<Ofertas> {
                     },
                     child: Card(
                       child: ListTile(
-                        leading: Icon(Icons.person),
+                        leading: Container(width: 80,height: 100,decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/fondo.jpg"),fit: BoxFit.fitWidth), color: Colors.amber)),
                         title: Text(interest.titulo),
                         subtitle: subtitulo(interest.descripcion),
                       ),
