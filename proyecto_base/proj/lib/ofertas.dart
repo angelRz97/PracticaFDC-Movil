@@ -75,7 +75,7 @@ class _OfertasState extends State<Ofertas> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("DETALLE FORMACION",style: TextStyle(fontWeight: FontWeight.bold,)),
+          title: Text("DETALLE OFERTAS",style: TextStyle(fontWeight: FontWeight.bold,)),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
