@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:proj/paginas/principal.dart';
 
+import '../utils/conexion_api.dart';
+
 class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => LoginState();
@@ -20,6 +22,8 @@ class LoginState extends State<Login> {
 
   bool usuarioCorrecto = false;
   bool contrasenaCorrecta = false;
+  bool errorLogin = false;
+  bool campoVacio = false;
 
   final formKey = GlobalKey<FormState>();
 
@@ -84,21 +88,42 @@ class LoginState extends State<Login> {
                 }
               },
               decoration: InputDecoration(
-                hintText: 'Usuario',
+                hintText: 'Email',
                 prefixIcon: const Icon(
                   Icons.person,
                   color: Color.fromRGBO(120, 120, 120, 1),
                 ),
                 filled: true,
                 fillColor: const Color.fromRGBO(217, 217, 217, 1),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color.fromRGBO(120, 120, 120, 1), width: 2)),
-                errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color.fromRGBO(237, 67, 55, 1), width: 1)),
-                errorStyle: const TextStyle(color: Color.fromRGBO(237, 67, 55, 1), fontFamily: 'InriaSans', fontWeight: FontWeight.bold),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(120, 120, 120, 1), width: 2)),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(237, 67, 55, 1), width: 1)),
+                errorStyle: const TextStyle(
+                    color: Color.fromRGBO(237, 67, 55, 1),
+                    fontFamily: 'InriaSans',
+                    fontWeight: FontWeight.bold),
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return "Campo vacío";
+                  setState(() {
+                    campoVacio = true;
+                  });
+                  return "";
+                } else {
+                  setState(() {
+                    campoVacio = false;
+                  });
+                }
+                if (errorLogin) {
+                  return "";
                 }
                 return null;
               }),
@@ -126,7 +151,9 @@ class LoginState extends State<Login> {
                   color: Color.fromRGBO(120, 120, 120, 1),
                 ),
                 suffixIcon: IconButton(
-                  icon: Icon(contrasenaNoVisible ? Icons.visibility_off : Icons.visibility),
+                  icon: Icon(contrasenaNoVisible
+                      ? Icons.visibility_off
+                      : Icons.visibility),
                   color: const Color.fromRGBO(120, 120, 120, 1),
                   onPressed: () {
                     setState(() {
@@ -134,14 +161,33 @@ class LoginState extends State<Login> {
                     });
                   },
                 ),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color.fromRGBO(120, 120, 120, 1), width: 2)),
-                errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color.fromRGBO(237, 67, 55, 1), width: 1)),
-                errorStyle: const TextStyle(color: Color.fromRGBO(237, 67, 55, 1), fontFamily: 'InriaSans', fontWeight: FontWeight.bold),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(120, 120, 120, 1), width: 2)),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(237, 67, 55, 1), width: 1)),
+                errorStyle: const TextStyle(
+                    color: Color.fromRGBO(237, 67, 55, 1),
+                    fontFamily: 'InriaSans',
+                    fontWeight: FontWeight.bold),
               ),
               validator: (value) {
+                if (campoVacio) {
+                  return "No debe haber campos vacíos.";
+                }
                 if (value!.isEmpty) {
-                  return "Campo vacío";
+                  setState(() {
+                    campoVacio = true;
+                  });
+                  return "No debe haber campos vacíos.";
+                } else if (errorLogin) {
+                  return "Email o contraseña incorrectos.";
                 }
                 return null;
               }),
@@ -154,16 +200,40 @@ class LoginState extends State<Login> {
             color: Color(0xFF0750d8),
           ),
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               formKey.currentState!.validate();
-              if (usuarioCorrecto && contrasenaCorrecta) {
-                formKey.currentState!.save();
-                hashPassword(contrasenaController.text);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => Principal(usuario: usuarioController.text)),
-                );
+              if (contrasenaController.text.isNotEmpty ||
+                  usuarioController.text.isNotEmpty) {
+                switch (await ConexionApi.login(usuarioController.text,
+                    hashPassword(contrasenaController.text))) {
+                  case 1:
+                    //print("comprobación correcta");
+                    setState(() {
+                      errorLogin = true;
+                    });
+                    formKey.currentState!.validate();
+                    break;
+                  case 2:
+                    print("muerte");
+                    break;
+                  case 0:
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Principal()),
+                    );
+                    break;
+                }
               }
+              // if (usuarioCorrecto && contrasenaCorrecta) {
+              //   formKey.currentState!.save();
+              //   hashPassword(contrasenaController.text);
+              //   Navigator.pushReplacement(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) =>
+              //             Principal(usuario: usuarioController.text)),
+              //   );
+              // }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF0750d8),
@@ -172,7 +242,7 @@ class LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 10, 10),
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: Text(
                     'ACCEDER',
                     style: TextStyle(

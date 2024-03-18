@@ -8,9 +8,13 @@ class ControladorEncriptacion {
 
   /// Devuelveu un String encriptado
   static String ecriptar(String cadena) {
-    encriptador = Encrypter(AES(clave));
-    final encriptado = encriptador.encrypt(cadena, iv: iv);
-    return encriptado.base64;
+    if (cadena.isNotEmpty) {
+      encriptador = Encrypter(AES(clave));
+      final encriptado = encriptador.encrypt(cadena, iv: iv);
+      return encriptado.base64;
+    } else {
+      return "";
+    }
   }
 
   /// Desencripta el String que se le pase
