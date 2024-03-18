@@ -36,7 +36,7 @@ class ConexionApi {
             id: datosRespuesta["usuario"]["id"],
             usuario: ControladorEncriptacion.desencriptar(
                 datosRespuesta["usuario"]["usuario"]),
-            contrasena: datosRespuesta["usuario"]["contrasena"],
+            contrasena: contrasena,
             nombre: ControladorEncriptacion.desencriptar(
                 datosRespuesta["usuario"]["nombre"]),
             apellidos: ControladorEncriptacion.desencriptar(

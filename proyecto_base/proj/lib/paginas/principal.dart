@@ -26,7 +26,7 @@ class _principal extends State<Principal> {
   final controller = TextEditingController();
 
   /// Lista general de intereses
-  //List<Interes> intereses = listaIntereses;
+  List<Interes> intereses = Controlador.listaIntereses;
 
   /// Lista de intereses que has seleccionado
   List<Interes> interesesSeleccionados = [];
@@ -303,9 +303,9 @@ class _principal extends State<Principal> {
                   /// Cambiar efecto del overscroll en la lista
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: Controlador.listaIntereses.length,
+                  itemCount: intereses.length,
                   itemBuilder: (context, index) {
-                    final interes = Controlador.listaIntereses[index];
+                    final interes = intereses[index];
                     return ListTile(
                       leading: const Icon(Icons.person),
                       title: Text(interes.nombre),
@@ -351,12 +351,18 @@ class _principal extends State<Principal> {
 
   /// Método searchInteres(String) para buscar un elemento en la lista general de intereses
   void searchInteres(String query) {
-    final sugerencias = Controlador.listaIntereses.where((interes) {
-      final nombreInteres = interes.nombre.toLowerCase();
-      final input = query.toLowerCase();
+    if (query.isEmpty) {
+      setState(() {
+        intereses = Controlador.listaIntereses;
+      });
+    } else {
+      final sugerencias = intereses.where((interes) {
+        final nombreInteres = interes.nombre.toLowerCase();
+        final input = query.toLowerCase();
 
-      return nombreInteres.contains(input);
-    }).toList();
-    setState(() => Controlador.listaIntereses = sugerencias);
+        return nombreInteres.contains(input);
+      }).toList();
+      setState(() => intereses = sugerencias);
+    }
   }
 }
