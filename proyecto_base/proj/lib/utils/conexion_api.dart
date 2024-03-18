@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:proj/models/interes.dart';
 import 'package:proj/models/usuario.dart';
 import 'package:proj/utils/controlador.dart';
 import 'package:proj/utils/controlador_encriptacion.dart';
@@ -36,7 +35,7 @@ class ConexionApi {
             id: datosRespuesta["usuario"]["id"],
             usuario: ControladorEncriptacion.desencriptar(
                 datosRespuesta["usuario"]["usuario"]),
-            contrasena: contrasena,
+            contrasena: datosRespuesta["usuario"]["contrasena"],
             nombre: ControladorEncriptacion.desencriptar(
                 datosRespuesta["usuario"]["nombre"]),
             apellidos: ControladorEncriptacion.desencriptar(
@@ -57,41 +56,6 @@ class ConexionApi {
       return 2;
     }
     // Todo correcto
-    return 0;
-  }
-
-  /// Metodo para recuperar la lista de todos los intereses de la bd. Devuelve un entero en función del resultado.
-  static Future<int> recuperaIntereses() async {
-    String peticion = "${url}api/etiquetas";
-    try {
-      // Se realiza la petición
-      final respuesta = await http.get(
-        Uri.parse(peticion),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-      // Se recogen los datos
-      final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
-      Map<String, dynamic> datosRespuesta = jsonDecode(respuestaDecodificada);
-      List<dynamic> errores = datosRespuesta["errores"];
-      if (errores.isNotEmpty) {
-        // Existen errores
-        return 1;
-      } else {
-        // Se guardan las etiquetas en el controlador
-        List<dynamic> etiquetas = datosRespuesta["etiquetas"];
-        for (int i = 0; i < etiquetas.length; i++) {
-          Interes interes =
-              Interes(id: etiquetas[i]["id"], nombre: etiquetas[i]["nombre"]);
-          Controlador.listaIntereses.add(interes);
-        }
-      }
-    } catch (e) {
-      // Error en la ejecución
-      return 2;
-    }
-    // Todo ok
     return 0;
   }
 }

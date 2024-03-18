@@ -214,23 +214,13 @@ class LoginState extends State<Login> {
                     formKey.currentState!.validate();
                     break;
                   case 2:
-                    print("Error conexión usuario.");
+                    print("muerte");
                     break;
                   case 0:
-                    switch (await ConexionApi.recuperaIntereses()) {
-                      case 1:
-                        print("Error api etiquetas.");
-                        break;
-                      case 2:
-                        print("Error al recuperar etiquetas.");
-                        break;
-                      case 0:
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Principal()),
-                        );
-                        break;
-                    }
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Principal()),
+                    );
                     break;
                 }
               }

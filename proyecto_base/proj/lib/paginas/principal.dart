@@ -3,10 +3,11 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-import 'package:proj/models/usuario.dart';
 import '../construirPerfil.dart';
 import '../models/interes.dart';
 import '../utils/controlador.dart';
+import 'formacion.dart';
+import 'ofertas.dart';
 
 /// Clase contenedora de la pantalla principal de la aplicación
 class Principal extends StatefulWidget {
@@ -26,13 +27,13 @@ class _principal extends State<Principal> {
   final controller = TextEditingController();
 
   /// Lista general de intereses
-  List<Interes> intereses = Controlador.listaIntereses;
+  List<Interes> intereses = listaIntereses;
 
   /// Lista de intereses que has seleccionado
   List<Interes> interesesSeleccionados = [];
 
   /// Texto default del estado del perfil
-  String estado = Controlador.usuario.estado.name;
+  String estado = "DESEMPLEADO";
 
   @override
   Widget build(BuildContext context) {
@@ -116,10 +117,10 @@ class _principal extends State<Principal> {
           child: Text("pagina 1", style: TextStyle(fontFamily: 'GowunDodum')));
     }
     if (index == 1) {
-      return const Center(child: Text("pagina 2"));
+      return Ofertas();
     }
     if (index == 2) {
-      return const Center(child: Text("pagina 3"));
+      return Formacion();
     }
     if (index == 3) {
       /// Llamar al widget paginaUsuario()
@@ -177,21 +178,20 @@ class _principal extends State<Principal> {
           const SizedBox(height: 24),
 
           /// Funcion para construir el apartado de estado e intereses
-          construirNombre(
-              "${Controlador.usuario.nombre} ${Controlador.usuario.apellidos}",
-              Controlador.usuario.email),
+          construirNombre(Controlador.usuario.nombre),
         ],
       );
     }
   }
 
-  Widget construirNombre(nombre, email) => Column(
+  Widget construirNombre(nombre) => Column(
         children: [
           Text(nombre,
               style:
                   const TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
           const SizedBox(height: 4),
-          Text(email, style: const TextStyle(color: Colors.grey, fontSize: 18)),
+          Text(nombre,
+              style: const TextStyle(color: Colors.grey, fontSize: 18)),
           const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.only(
@@ -229,7 +229,7 @@ class _principal extends State<Principal> {
               icon: const Icon(Icons.arrow_drop_down,
                   color: Color.fromRGBO(25, 5, 255, 1)),
               iconSize: 50,
-              items: [Estado.DESEMPLEADO.name, Estado.EMPLEADO.name]
+              items: ['DESEMPLEADO', 'CON EMPLEO']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -351,18 +351,12 @@ class _principal extends State<Principal> {
 
   /// Método searchInteres(String) para buscar un elemento en la lista general de intereses
   void searchInteres(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        intereses = Controlador.listaIntereses;
-      });
-    } else {
-      final sugerencias = intereses.where((interes) {
-        final nombreInteres = interes.nombre.toLowerCase();
-        final input = query.toLowerCase();
+    final sugerencias = listaIntereses.where((interes) {
+      final nombreInteres = interes.nombre.toLowerCase();
+      final input = query.toLowerCase();
 
-        return nombreInteres.contains(input);
-      }).toList();
-      setState(() => intereses = sugerencias);
-    }
+      return nombreInteres.contains(input);
+    }).toList();
+    setState(() => intereses = sugerencias);
   }
 }
