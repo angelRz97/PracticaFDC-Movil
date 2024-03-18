@@ -4,6 +4,8 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:proj/models/usuario.dart';
+import 'package:proj/paginas/formacion.dart';
+import 'package:proj/paginas/ofertas.dart';
 import '../construirPerfil.dart';
 import '../models/interes.dart';
 import '../utils/controlador.dart';
@@ -116,10 +118,10 @@ class _principal extends State<Principal> {
           child: Text("pagina 1", style: TextStyle(fontFamily: 'GowunDodum')));
     }
     if (index == 1) {
-      return const Center(child: Text("pagina 2"));
+      return Ofertas();
     }
     if (index == 2) {
-      return const Center(child: Text("pagina 3"));
+      return Formacion();
     }
     if (index == 3) {
       /// Llamar al widget paginaUsuario()
