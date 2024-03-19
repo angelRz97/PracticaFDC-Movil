@@ -7,7 +7,7 @@ class ControladorEncriptacion {
   static late Encrypter encriptador;
 
   /// Devuelveu un String encriptado
-  static String ecriptar(String cadena) {
+  static String encriptar(String cadena) {
     if (cadena.isNotEmpty) {
       encriptador = Encrypter(AES(clave));
       final encriptado = encriptador.encrypt(cadena, iv: iv);
