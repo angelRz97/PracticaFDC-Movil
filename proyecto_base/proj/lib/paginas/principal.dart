@@ -3,6 +3,7 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
+import 'package:proj/paginas/formacion.dart';
 import 'ofertas.dart';
 import 'perfil.dart';
 
@@ -39,7 +40,8 @@ class _principal extends State<Principal> {
               child: Text(
                 barText,
                 textAlign: TextAlign.end,
-                style: const TextStyle(fontFamily: 'InriaSans', color: Colors.white),
+                style: const TextStyle(
+                    fontFamily: 'InriaSans', color: Colors.white),
               ),
             )
           ],
@@ -54,9 +56,12 @@ class _principal extends State<Principal> {
         height: 60,
         index: selectedIndex,
         items: [
-          footerItem("NOVEDADES", const Icon(Icons.new_releases, color: Colors.white)),
-          footerItem("OFERTAS", const Icon(Icons.cases_rounded, color: Colors.white)),
-          footerItem("FORMACIÓN", const Icon(Icons.school, color: Colors.white)),
+          footerItem(
+              "NOVEDADES", const Icon(Icons.new_releases, color: Colors.white)),
+          footerItem(
+              "OFERTAS", const Icon(Icons.cases_rounded, color: Colors.white)),
+          footerItem(
+              "FORMACIÓN", const Icon(Icons.school, color: Colors.white)),
           footerItem("USUARIO", const Icon(Icons.person, color: Colors.white))
         ],
         color: const Color.fromRGBO(25, 5, 255, 1),
@@ -94,13 +99,14 @@ class _principal extends State<Principal> {
   /// Función mostrarPag() para mostrar la página correspondiente
   mostrarPag(index) {
     if (index == 0) {
-      return const Center(child: Text("pagina 1", style: TextStyle(fontFamily: 'GowunDodum')));
+      return const Center(
+          child: Text("pagina 1", style: TextStyle(fontFamily: 'GowunDodum')));
     }
     if (index == 1) {
       return Ofertas();
     }
     if (index == 2) {
-      return const Center(child: Text("pagina 3"));
+      return Formacion();
     }
     if (index == 3) {
       /// Llamar al widget paginaUsuario()
@@ -110,6 +116,9 @@ class _principal extends State<Principal> {
 
   /// Función footerItem(String, Icon) para definir cada elemento de la NavigationBar
   footerItem(String texto, Icon icono) {
-    return CurvedNavigationBarItem(child: icono, label: texto, labelStyle: const TextStyle(color: Colors.white));
+    return CurvedNavigationBarItem(
+        child: icono,
+        label: texto,
+        labelStyle: const TextStyle(color: Colors.white));
   }
 }

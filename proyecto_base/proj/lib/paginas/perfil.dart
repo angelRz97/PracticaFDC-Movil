@@ -283,12 +283,18 @@ class _PerfilState extends State<Perfil> {
 
   /// Método searchInteres(String) para buscar un elemento en la lista general de intereses
   void searchInteres(String query) {
-    final sugerencias = intereses.where((interes) {
-      final nombreInteres = interes.nombre.toLowerCase();
-      final input = query.toLowerCase();
+    if (query.isEmpty) {
+      setState(() {
+        intereses = Controlador.listaIntereses;
+      });
+    } else {
+      final sugerencias = intereses.where((interes) {
+        final nombreInteres = interes.nombre.toLowerCase();
+        final input = query.toLowerCase();
 
-      return nombreInteres.contains(input);
-    }).toList();
-    setState(() => intereses = sugerencias);
+        return nombreInteres.contains(input);
+      }).toList();
+      setState(() => intereses = sugerencias);
+    }
   }
 }
