@@ -1,7 +1,6 @@
 import 'package:proj/models/formacionDTO.dart';
 import 'package:proj/models/interes.dart';
 import 'package:proj/models/usuario.dart';
-import 'package:proj/paginas/ofertas.dart';
 
 import '../models/ofertaDTO.dart';
 
