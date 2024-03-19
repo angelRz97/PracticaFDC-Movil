@@ -24,6 +24,9 @@ class LoginState extends State<Login> {
   bool contrasenaCorrecta = false;
   bool errorLogin = false;
   bool campoVacio = false;
+  bool compruebaLogin = false;
+  bool etiquetas = false;
+  bool novedades = false;
 
   final formKey = GlobalKey<FormState>();
 
@@ -210,28 +213,65 @@ class LoginState extends State<Login> {
                     //print("comprobación correcta");
                     setState(() {
                       errorLogin = true;
+                      compruebaLogin = false;
                     });
                     formKey.currentState!.validate();
                     break;
                   case 2:
                     print("Error conexión usuario.");
+                    setState(() {
+                      compruebaLogin = false;
+                    });
                     break;
                   case 0:
-                    switch (await ConexionApi.recuperaIntereses()) {
-                      case 1:
-                        print("Error api etiquetas.");
-                        break;
+                    setState(() {
+                      compruebaLogin = true;
+                    });
+                    break;
+                }
+
+                if (compruebaLogin) {
+                  switch (await ConexionApi.recuperaIntereses()) {
+                    case 1:
+                      print("Error api etiquetas.");
+                      setState(() {
+                        etiquetas = false;
+                      });
+                      break;
+                    case 2:
+                      print("Error al recuperar etiquetas.");
+                      setState(() {
+                        etiquetas = false;
+                      });
+                      break;
+                    case 0:
+                      setState(() {
+                        etiquetas = true;
+                      });
+                      break;
+                  }
+
+                  if (etiquetas) {
+                    switch (await ConexionApi.recuperaNovedades()) {
                       case 2:
-                        print("Error al recuperar etiquetas.");
+                        setState(() {
+                          novedades = false;
+                        });
                         break;
                       case 0:
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Principal()),
-                        );
+                        setState(() {
+                          novedades = true;
+                        });
                         break;
                     }
-                    break;
+                  }
+                }
+
+                if (compruebaLogin && etiquetas && novedades) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Principal()),
+                  );
                 }
               }
               // if (usuarioCorrecto && contrasenaCorrecta) {

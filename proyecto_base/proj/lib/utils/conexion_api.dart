@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:proj/models/formacionDTO.dart';
 import 'package:proj/models/interes.dart';
+import 'package:proj/models/ofertaDTO.dart';
 import 'package:proj/models/usuario.dart';
 import 'package:proj/utils/controlador.dart';
 import 'package:proj/utils/controlador_encriptacion.dart';
@@ -120,14 +122,6 @@ class ConexionApi {
       }
     } catch (e) {
       // Si hubo algún problema con la ejecución se devuelve 2
-      print(e);
-      print("ID:" + Controlador.usuario.id.toString());
-      print("Usuario:" + Controlador.usuario.usuario);
-      print("Contra:" + Controlador.usuario.contrasena);
-      print("Name:" + Controlador.usuario.nombre);
-      print("Ap:" + Controlador.usuario.apellidos);
-      print("mail:" + Controlador.usuario.email);
-      print("telef:" + Controlador.usuario.telefono.toString());
       return 2;
     }
     // Todo correcto
@@ -168,4 +162,106 @@ class ConexionApi {
     // Todo ok
     return 0;
   }
+
+  // Realiza una petición a la api para recuperar las lista de ofertas y formaciones
+  static Future<int> recuperaNovedades() async {
+    String peticion = "${url}api/novedades";
+    try {
+      // Se realiza la petición
+      final respuesta = await http.get(
+        Uri.parse(peticion),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      // Se recogen los datos
+      final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
+      Map<String, dynamic> datosRespuesta = jsonDecode(respuestaDecodificada);
+      Map<String, dynamic> datosOfertas = datosRespuesta["ofertas"];
+      Map<String, dynamic> datosFormaciones = datosRespuesta["formaciones"];
+
+      //Ofertas o = Ofertas.fromJson(datosRespuesta["ofertas"]);
+
+      List<dynamic> listaOfertas = datosOfertas["ofertas"];
+      List<dynamic> listaFormaciones = datosFormaciones["listaFormaciones"];
+
+      //Lista ofertas
+      for (int i = 0; i < listaOfertas.length; i++) {
+        OfertaDTO oferta = OfertaDTO(
+            id: listaOfertas[i]["id"],
+            titulo: listaOfertas[i]["titulo"],
+            descripcion: listaOfertas[i]["descripcion"],
+            vacantes: listaOfertas[i]["vacantes"],
+            imagen: listaOfertas[i]["imagen"],
+            intereses: getIntereses(listaOfertas[i]["requisitos"]),
+            estado: listaOfertas[i]["estado"] == "ABIERTA"
+                ? EstadoOfertas.ABIERTA
+                : EstadoOfertas.CERRADA,
+            fecha: listaOfertas[i]["fecha"] == null
+                ? null
+                : DateTime.parse(listaOfertas[i]["fecha"]));
+        Controlador.listaOfertas.add(oferta);
+      }
+
+      //Lista formaciones
+      for (int i = 0; i < listaFormaciones.length; i++) {
+        FormacionDTO formacion = FormacionDTO(
+            id: listaFormaciones[i]["id"],
+            titulo: listaFormaciones[i]["titulo"],
+            descripcion: listaFormaciones[i]["descripcion"],
+            intereses: getIntereses(listaFormaciones[i]["requisitos"]),
+            fechaInicio: DateTime.parse(listaFormaciones[i]["inicio"]),
+            fechaFin: DateTime.parse(listaFormaciones[i]["fin"]),
+            imagen: listaFormaciones[i]["imagen"],
+            estado: listaFormaciones[i]["estado"] == "ABIERTA"
+                ? EstadoOfertas.ABIERTA
+                : EstadoOfertas.CERRADA,
+            coste: listaFormaciones[i]["coste"],
+            fecha: listaFormaciones[i]["fecha"] == null
+                ? null
+                : DateTime.parse(listaFormaciones[i]["fecha"]));
+        Controlador.listaFormaciones.add(formacion);
+      }
+    } catch (e) {
+      // Hubo errores en la ejecución
+      print(e);
+      return 2;
+    }
+    // Todo correcto
+    return 0;
+  }
+
+  static List<Interes> getIntereses(List<dynamic> listaIntereses) {
+    List<Interes> lista = [];
+    for (int i = 0; i < listaIntereses.length; i++) {
+      for (int x = 0; x < Controlador.listaIntereses.length; x++) {
+        if (Controlador.listaIntereses[x].id == int.parse(listaIntereses[i])) {
+          lista.add(Controlador.listaIntereses[x]);
+          break;
+        }
+      }
+    }
+    return lista;
+  }
 }
+
+// class Ofertas {
+//   int id;
+//   String titulo;
+//   String descripcion;
+//   List<Map> opciones;
+
+//   Ofertas(
+//       {required this.id,
+//       required this.titulo,
+//       required this.descripcion,
+//       required this.opciones});
+
+//   factory Ofertas.fromJson(Map<String, dynamic> usersjson) => Ofertas(
+//         opciones: usersjson["ofertas"],
+//         id: usersjson["ofertas"],
+//         titulo: usersjson["titulo"],
+//         descripcion: usersjson["descripcion"],
+//         // email: usersjson["email"],
+//       );
+// }

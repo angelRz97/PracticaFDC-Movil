@@ -16,7 +16,7 @@ class _FormacionState extends State<Formacion> {
   final controller = TextEditingController();
 
   /// lista de Formacion
-  List<FormacionDTO> interests = formacion;
+  List<FormacionDTO> interests = Controlador.listaFormaciones;
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +52,13 @@ class _FormacionState extends State<Formacion> {
                 child: Card(
                   child: ListTile(
                     leading: Container(
-                        width: 80,
-                        height: 100,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(interest.imagen),
-                                fit: BoxFit.fitWidth))),
+                      width: 80,
+                      height: 100,
+                      // decoration: BoxDecoration(
+                      //     image: DecorationImage(
+                      //         image: AssetImage(interest.imagen),
+                      //         fit: BoxFit.fitWidth)),
+                    ),
                     title: Text("CURSO"),
                     subtitle: Text(interest.titulo),
                   ),
@@ -104,12 +105,12 @@ class _FormacionState extends State<Formacion> {
                           fontWeight: FontWeight.bold,
                         )),
                     Spacer(),
-                    Text(
-                      "VACANTES: " + interestName.vacantes.toString(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    // Text(
+                    //   "VACANTES: " + interestName.vacantes.toString(),
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
                   ],
                 ),
                 Container(
@@ -134,7 +135,7 @@ class _FormacionState extends State<Formacion> {
                     )),
                 Container(
                   width: 300,
-                  height: 150,
+                  height: 300,
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                       color: Color.fromARGB(255, 185, 185, 185),
@@ -148,24 +149,24 @@ class _FormacionState extends State<Formacion> {
                 ),
 
                 /// Requisito de la formacion
-                Text("REQUISITOS",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    )),
-                Container(
-                  width: 300,
-                  height: 150,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 185, 185, 185),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: SingleChildScrollView(
-                      child: Text(interestName.requisitos,
-                          textAlign: TextAlign.justify)),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                // Text("REQUISITOS",
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.bold,
+                //     )),
+                // Container(
+                //   width: 300,
+                //   height: 150,
+                //   padding: EdgeInsets.all(10),
+                //   decoration: BoxDecoration(
+                //       color: Color.fromARGB(255, 185, 185, 185),
+                //       borderRadius: BorderRadius.circular(10)),
+                //   child: SingleChildScrollView(
+                //       child: Text(interestName.requisitos,
+                //           textAlign: TextAlign.justify)),
+                // ),
+                // SizedBox(
+                //   height: 20,
+                // ),
 
                 /// fechas de incio y final del las formaciones
                 Text("DURACION DEL CURSO",
@@ -218,7 +219,7 @@ class _FormacionState extends State<Formacion> {
                     )),
 
                 /// Lista provisional de etiquetas a espera de la API
-                listaEtiquetas(Controlador.listaIntereses),
+                listaEtiquetas(interestName.intereses),
               ],
             ),
           ),
