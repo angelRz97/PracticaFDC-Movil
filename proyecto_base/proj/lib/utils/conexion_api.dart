@@ -67,7 +67,6 @@ class ConexionApi {
     String peticion = "${url}api/usuarios";
     try {
       // Se realiza la petición
-      print(Controlador.usuario.estado.name);
       final respuesta = await http.put(Uri.parse(peticion),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -231,6 +230,23 @@ class ConexionApi {
     return 0;
   }
 
+  // static Future<int> inscribirFormacio(int idUsuario, int idFormacion) async{
+  //   String peticion = "${url}api/formaciones/$idFormacion/inscripciones";
+  //   try {
+  //     // Se realiza la petición
+  //     final respuesta = await http.post(Uri.parse(peticion),
+  //         headers: <String, String>{
+  //           'Content-Type': 'application/json; charset=UTF-8',
+  //         },
+  //         body: jsonEncode(<String, dynamic>{
+  //           "usuario_id":idUsuario
+  //         }));
+  //     final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
+  //   }catch(e){
+
+  //   }
+  // }
+
   static List<Interes> getIntereses(List<dynamic> listaIntereses) {
     List<Interes> lista = [];
     for (int i = 0; i < listaIntereses.length; i++) {
@@ -244,24 +260,3 @@ class ConexionApi {
     return lista;
   }
 }
-
-// class Ofertas {
-//   int id;
-//   String titulo;
-//   String descripcion;
-//   List<Map> opciones;
-
-//   Ofertas(
-//       {required this.id,
-//       required this.titulo,
-//       required this.descripcion,
-//       required this.opciones});
-
-//   factory Ofertas.fromJson(Map<String, dynamic> usersjson) => Ofertas(
-//         opciones: usersjson["ofertas"],
-//         id: usersjson["ofertas"],
-//         titulo: usersjson["titulo"],
-//         descripcion: usersjson["descripcion"],
-//         // email: usersjson["email"],
-//       );
-// }
