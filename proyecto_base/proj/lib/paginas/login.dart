@@ -1,10 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:crypto/crypto.dart';
 import 'package:proj/paginas/principal.dart';
+import 'package:proj/utils/controlador_encriptacion.dart';
 
 import '../utils/conexion_api.dart';
 
@@ -208,7 +206,7 @@ class LoginState extends State<Login> {
               if (contrasenaController.text.isNotEmpty ||
                   usuarioController.text.isNotEmpty) {
                 switch (await ConexionApi.login(usuarioController.text,
-                    hashPassword(contrasenaController.text))) {
+                    ControladorEncriptacion.hashPassword(contrasenaController.text))) {
                   case 1:
                     //print("comprobación correcta");
                     setState(() {
@@ -313,11 +311,5 @@ class LoginState extends State<Login> {
         ),
       ],
     );
-  }
-
-  String hashPassword(String password) {
-    var pass = utf8.encode(password);
-    var passHex = sha256.convert(pass);
-    return passHex.toString();
   }
 }

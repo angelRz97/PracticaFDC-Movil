@@ -231,6 +231,8 @@ class ConexionApi {
     return 0;
   }
 
+  // static Future<int> inscribirFormacio()
+
   static List<Interes> getIntereses(List<dynamic> listaIntereses) {
     List<Interes> lista = [];
     for (int i = 0; i < listaIntereses.length; i++) {
@@ -244,24 +246,3 @@ class ConexionApi {
     return lista;
   }
 }
-
-// class Ofertas {
-//   int id;
-//   String titulo;
-//   String descripcion;
-//   List<Map> opciones;
-
-//   Ofertas(
-//       {required this.id,
-//       required this.titulo,
-//       required this.descripcion,
-//       required this.opciones});
-
-//   factory Ofertas.fromJson(Map<String, dynamic> usersjson) => Ofertas(
-//         opciones: usersjson["ofertas"],
-//         id: usersjson["ofertas"],
-//         titulo: usersjson["titulo"],
-//         descripcion: usersjson["descripcion"],
-//         // email: usersjson["email"],
-//       );
-// }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:proj/paginas/crearOferta.dart';
 import 'paginas/login.dart';
 import 'paginas/principal.dart';
 
@@ -11,12 +13,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: '/login',
         routes: {
           "/login": (BuildContext context) => Login(),
           '/principal': (BuildContext context) => Principal(),
+          '/crearOferta': (BuildContext context) => CrearOferta(),
         });
   }
 }

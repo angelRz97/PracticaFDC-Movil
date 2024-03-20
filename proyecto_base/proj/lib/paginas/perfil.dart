@@ -1,10 +1,13 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:proj/models/usuario.dart';
-import 'package:proj/utils/conexion_api.dart';
 
 import '../models/interes.dart';
 import '../utils/controlador.dart';
 import '../construirPerfil.dart';
+import 'editarperfil.dart';
 
 class Perfil extends StatefulWidget {
   @override
@@ -35,9 +38,50 @@ class _PerfilState extends State<Perfil> {
 
   @override
   Widget build(BuildContext context) {
-    if (Controlador.usuario.email == "admin@admin") {
+    if (Controlador.usuario.email != "admin") {
       return Column(
         children: [
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color.fromRGBO(217, 217, 217, 1)
+                  ),
+                  child: const Icon(Icons.cases_rounded),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/crearOferta');
+                },
+              ),
+              const SizedBox(width: 40),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color.fromRGBO(217, 217, 217, 1)
+                ),
+                child: const Icon(Icons.school),
+              ),
+              const SizedBox(width: 40),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color.fromRGBO(217, 217, 217, 1)
+                ),
+                child: const Icon(Icons.person),
+              )
+            ],
+          ),
+          const SizedBox(height: 10),
           Container(
             margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
             child: TextField(
@@ -55,8 +99,8 @@ class _PerfilState extends State<Perfil> {
             child: ListView.builder(
               itemCount: 1,
               itemBuilder: (context, index) {
-                return ListTile(
-                  leading: const Icon(Icons.person),
+                return const ListTile(
+                  leading: Icon(Icons.person),
                   title: Text("Controlador.usuario.usuario"),
                 );
               },
@@ -87,49 +131,45 @@ class _PerfilState extends State<Perfil> {
 
   Widget construirNombre(nombre, apellidos, email, telefono) => Column(
         children: [
-          TextFormField(
-            controller: nombreController,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
+          Text(nombre + " " + apellidos, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24), textAlign: TextAlign.center,),
           const SizedBox(height: 4),
-          TextFormField(
-            controller: apellidosController,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
+          Text(email, style: const TextStyle(color: Colors.grey, fontSize: 18), textAlign: TextAlign.center,),
           const SizedBox(height: 4),
-          TextFormField(
-            controller: emailController,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          RichText(
+            text: TextSpan(
+              children: [
+                const WidgetSpan(
+                  child: Icon(Icons.phone, size: 19),
+                ),
+                TextSpan(
+                  text: ' ' + telefono,
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 4),
-          TextFormField(
-            controller: telefonoController,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: 200, 
+            child: ElevatedButton(
+              onPressed: () => Get.to(() => EditarPerfil()), 
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0750d8), 
+                side: BorderSide.none, 
+                shape: const StadiumBorder()
+              ), 
+              child: const Text('Editar Perfil', 
+                style: TextStyle(color: Colors.white),
+              )
+            )
           ),
-          const SizedBox(height: 20),
-          // Text(nombre + " " + apellidos, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-          // const SizedBox(height: 4),
-          // Text(email, style: const TextStyle(color: Colors.grey, fontSize: 18)),
-          // const SizedBox(height: 20),
-          IconButton(
-            icon: Icon(Icons.abc),
-            onPressed: () {
-              Controlador.usuario.nombre = nombreController.text;
-              Controlador.usuario.apellidos = apellidosController.text;
-              Controlador.usuario.email = emailController.text;
-              Controlador.usuario.telefono = telefonoController.text;
-              ConexionApi.actualizar();
-            },
-          ),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.only(
                 left: 120, right: 120, top: 10, bottom: 10),
             decoration: const BoxDecoration(
               color: Color.fromRGBO(25, 5, 255, 1),
+              borderRadius: BorderRadius.all(Radius.circular(50))
             ),
             child: const Text(
               'ESTADO',
@@ -140,7 +180,7 @@ class _PerfilState extends State<Perfil> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.only(left: 35, right: 20),
             decoration: const BoxDecoration(
@@ -170,15 +210,16 @@ class _PerfilState extends State<Perfil> {
               }).toList(),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           Container(
             padding: const EdgeInsets.only(
-                left: 103, right: 103, top: 10, bottom: 10),
+                left: 48, right: 48, top: 10, bottom: 10),
             decoration: const BoxDecoration(
               color: Color.fromRGBO(25, 5, 255, 1),
+              borderRadius: BorderRadius.all(Radius.circular(50))
             ),
             child: const Text(
-              'INTERESES',
+              'LISTA DE INTERESES',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
@@ -186,9 +227,10 @@ class _PerfilState extends State<Perfil> {
               ),
             ),
           ),
+          const SizedBox(height: 10),
           Container(
               height: 40,
-              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: const Color.fromRGBO(217, 217, 217, 1),
@@ -214,6 +256,7 @@ class _PerfilState extends State<Perfil> {
                 /// Setear función de la barra
                 onChanged: searchInteres,
               )),
+              const SizedBox(height: 10),
           Container(
               margin: const EdgeInsets.fromLTRB(30, 0, 30, 10),
 
@@ -239,13 +282,11 @@ class _PerfilState extends State<Perfil> {
                   itemBuilder: (context, index) {
                     final interes = intereses[index];
                     return ListTile(
-                      leading: const Icon(Icons.person),
+                      leading: const Icon(Icons.add_circle_outline_sharp),
                       title: Text(interes.nombre),
                       onTap: () {
                         setState(() {
-                          if (interesesSeleccionados.contains(interes)) {
-                            interesesSeleccionados.remove(interes);
-                          } else {
+                          if (!interesesSeleccionados.contains(interes)) {
                             interesesSeleccionados.add(interes);
                           }
                         });
@@ -254,6 +295,24 @@ class _PerfilState extends State<Perfil> {
                   },
                 ),
               )),
+          const SizedBox(height: 20),
+          if (interesesSeleccionados.isNotEmpty)
+          Container(
+            padding: const EdgeInsets.only(left: 48, right: 48, top: 10, bottom: 10),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(25, 5, 255, 1),
+              borderRadius: BorderRadius.all(Radius.circular(50))
+            ),
+            child: const Text(
+              'INTERÉS EN',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             alignment: WrapAlignment.center,
@@ -261,19 +320,25 @@ class _PerfilState extends State<Perfil> {
             runSpacing: 8.0,
             children: interesesSeleccionados.map((interest) {
               bool seleccionado = interesesSeleccionados.contains(interest);
-              return Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                decoration: BoxDecoration(
-                  color: seleccionado
-                      ? const Color.fromRGBO(25, 5, 255, 1)
-                      : Colors.grey[700],
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Text(
-                  interest.nombre,
-                  style: const TextStyle(color: Colors.white),
-                ),
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (seleccionado) {
+                      interesesSeleccionados.remove(interest);
+                    }
+                  });
+                }, 
+                child: Container(
+                  padding:  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0750d8),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Text(
+                    interest.nombre,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                )
               );
             }).toList(),
           ),
