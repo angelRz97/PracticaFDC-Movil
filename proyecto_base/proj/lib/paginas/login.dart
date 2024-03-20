@@ -1,10 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:crypto/crypto.dart';
 import 'package:proj/paginas/principal.dart';
+import 'package:proj/utils/controlador_encriptacion.dart';
 
 import '../utils/conexion_api.dart';
 
@@ -24,6 +22,9 @@ class LoginState extends State<Login> {
   bool contrasenaCorrecta = false;
   bool errorLogin = false;
   bool campoVacio = false;
+  bool compruebaLogin = false;
+  bool etiquetas = false;
+  bool novedades = false;
 
   final formKey = GlobalKey<FormState>();
 
@@ -205,23 +206,70 @@ class LoginState extends State<Login> {
               if (contrasenaController.text.isNotEmpty ||
                   usuarioController.text.isNotEmpty) {
                 switch (await ConexionApi.login(usuarioController.text,
-                    hashPassword(contrasenaController.text))) {
+                    ControladorEncriptacion.hashPassword(contrasenaController.text))) {
                   case 1:
                     //print("comprobación correcta");
                     setState(() {
                       errorLogin = true;
+                      compruebaLogin = false;
                     });
                     formKey.currentState!.validate();
                     break;
                   case 2:
-                    print("muerte");
+                    print("Error conexión usuario.");
+                    setState(() {
+                      compruebaLogin = false;
+                    });
                     break;
                   case 0:
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => Principal()),
-                    );
+                    setState(() {
+                      compruebaLogin = true;
+                    });
                     break;
+                }
+
+                if (compruebaLogin) {
+                  switch (await ConexionApi.recuperaIntereses()) {
+                    case 1:
+                      print("Error api etiquetas.");
+                      setState(() {
+                        etiquetas = false;
+                      });
+                      break;
+                    case 2:
+                      print("Error al recuperar etiquetas.");
+                      setState(() {
+                        etiquetas = false;
+                      });
+                      break;
+                    case 0:
+                      setState(() {
+                        etiquetas = true;
+                      });
+                      break;
+                  }
+
+                  if (etiquetas) {
+                    switch (await ConexionApi.recuperaNovedades()) {
+                      case 2:
+                        setState(() {
+                          novedades = false;
+                        });
+                        break;
+                      case 0:
+                        setState(() {
+                          novedades = true;
+                        });
+                        break;
+                    }
+                  }
+                }
+
+                if (compruebaLogin && etiquetas && novedades) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Principal()),
+                  );
                 }
               }
               // if (usuarioCorrecto && contrasenaCorrecta) {
@@ -263,11 +311,5 @@ class LoginState extends State<Login> {
         ),
       ],
     );
-  }
-
-  String hashPassword(String password) {
-    var pass = utf8.encode(password);
-    var passHex = sha256.convert(pass);
-    return passHex.toString();
   }
 }
