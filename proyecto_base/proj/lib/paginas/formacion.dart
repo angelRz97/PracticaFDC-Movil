@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:proj/models/formacionDTO.dart';
 import 'package:proj/utils/controlador.dart';
-import '../models/interes.dart';
-import '../models/ofertaDTO.dart';
 
-/// Clase contenedora de la pantalla de ofertas de la aplicación
-class Ofertas extends StatefulWidget {
+import '../models/interes.dart';
+
+/// Clase contenedora de la pantalla de Formacion de la aplicación
+class Formacion extends StatefulWidget {
   @override
-  State<Ofertas> createState() => _OfertasState();
+  State<Formacion> createState() => _FormacionState();
 }
 
 /// Setear variables
-class _OfertasState extends State<Ofertas> {
+class _FormacionState extends State<Formacion> {
   /// Controlador de introducción de texto
   final controller = TextEditingController();
 
-  /// lista de ofertas
-  List<OfertaDTO> interests = Controlador.listaOfertas;
+  /// lista de Formacion
+  List<FormacionDTO> interests = Controlador.listaFormaciones;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        /// Crear un buscador que filtra ofertas segun el texto
+        /// Crear un buscador que filtra Formacion segun el texto
         Container(
             margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
             child: TextField(
@@ -34,7 +35,7 @@ class _OfertasState extends State<Ofertas> {
                       borderSide: const BorderSide(color: Colors.red))),
               onChanged: searchInterest,
             )),
-        //Lista de offertas
+        //Lista de ofertas
         Expanded(
           child: ListView.builder(
             itemCount: interests.length,
@@ -42,12 +43,12 @@ class _OfertasState extends State<Ofertas> {
               final interest = interests[index];
 
               return InkWell(
-                /// Mostra detalle de oferta al clicar
+                /// Mostra detalle de formacion al clickar
                 onTap: () {
                   _showInterestDialog(interest);
                 },
 
-                /// Cata en la que se muetra la imagen, titulo y descripcion de la oferta
+                /// Cata en la que se muetra la imagen, titulo y descripcion de la formacion
                 child: Card(
                   child: ListTile(
                     leading: Container(
@@ -58,7 +59,7 @@ class _OfertasState extends State<Ofertas> {
                       //         image: AssetImage(interest.imagen),
                       //         fit: BoxFit.fitWidth)),
                     ),
-                    title: Text("OFERTA LABORAL"),
+                    title: Text("CURSO"),
                     subtitle: Text(interest.titulo),
                   ),
                 ),
@@ -72,7 +73,7 @@ class _OfertasState extends State<Ofertas> {
 
   /// Metodo para el buscador
   void searchInterest(String query) {
-    final suggestions = Controlador.listaOfertas.where((interest) {
+    final suggestions = formacion.where((interest) {
       final interestName = interest.titulo.toLowerCase();
       final input = query.toLowerCase();
 
@@ -82,13 +83,13 @@ class _OfertasState extends State<Ofertas> {
     setState(() => interests = suggestions);
   }
 
-  // Metodo para mostrar los detalles de una oferta
-  void _showInterestDialog(OfertaDTO interestName) {
+  // Metodo para mostrar los detalles de una formacion
+  void _showInterestDialog(FormacionDTO interestName) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("DETALLE OFERTAS",
+          title: Text("DETALLE FORMACION",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               )),
@@ -96,7 +97,7 @@ class _OfertasState extends State<Ofertas> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// Titulo de la oferta y vacantes
+                /// Titulo de la formacion y vacantes
                 Row(
                   children: [
                     Text("TITULO",
@@ -104,12 +105,12 @@ class _OfertasState extends State<Ofertas> {
                           fontWeight: FontWeight.bold,
                         )),
                     Spacer(),
-                    Text(
-                      "VACANTES: " + interestName.vacantes.toString(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    // Text(
+                    //   "VACANTES: " + interestName.vacantes.toString(),
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
                   ],
                 ),
                 Container(
@@ -127,7 +128,7 @@ class _OfertasState extends State<Ofertas> {
                   height: 20,
                 ),
 
-                /// Descripcion de la oferta
+                /// Descripcion de la formacion
                 Text("DESCRIPCION",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -147,7 +148,7 @@ class _OfertasState extends State<Ofertas> {
                   height: 20,
                 ),
 
-                /// Requisito de la oferta
+                /// Requisito de la formacion
                 // Text("REQUISITOS",
                 //     style: TextStyle(
                 //       fontWeight: FontWeight.bold,
@@ -167,7 +168,51 @@ class _OfertasState extends State<Ofertas> {
                 //   height: 20,
                 // ),
 
-                /// Etiquetas de las ofertas
+                /// fechas de incio y final del las formaciones
+                Text("DURACION DEL CURSO",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )),
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 185, 185, 185),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                        child: Text("Inicio: " +
+                            interestName.fechaInicio.day.toString() +
+                            "/" +
+                            interestName.fechaInicio.month.toString() +
+                            "/" +
+                            interestName.fechaInicio.year.toString()),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 185, 185, 185),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                        child: Text("Fin: " +
+                            interestName.fechaFin.day.toString() +
+                            "/" +
+                            interestName.fechaFin.month.toString() +
+                            "/" +
+                            interestName.fechaFin.year.toString()),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+
+                /// Etiquetas dde intereses
                 Text("INTERESES",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -200,7 +245,7 @@ class _OfertasState extends State<Ofertas> {
     );
   }
 
-  /// Metodo que devuelve un widget con las etiquetas de la oferta
+  /// Metodo que devuelve un widget con las etiquetas de la formacion
   Widget listaEtiquetas(List<Interes> etiqueta) {
     return Wrap(
         spacing: MediaQuery.of(context).size.width * 0.02,
