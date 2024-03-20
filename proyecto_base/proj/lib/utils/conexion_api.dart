@@ -259,6 +259,7 @@ class ConexionApi {
     return 0;
   }
 
+  /// Recupera los intereses del usuario
   static Future<int> interesesUsuario(int idUsuario) async {
     String peticion = "${url}api/usuarios/$idUsuario/intereses";
     try {
@@ -294,7 +295,9 @@ class ConexionApi {
     return 0;
   }
 
-  static Future<int> insertarInteresUsuario(int idUsuario) async {
+  /// Inserta intereses de usuario en la bd
+  static Future<int> insertarInteresUsuario(
+      int idUsuario, Interes interes) async {
     String peticion = "${url}api/usuarios/$idUsuario/intereses";
     try {
       // Se realiza la petición
@@ -302,22 +305,15 @@ class ConexionApi {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: jsonEncode(<String, dynamic>{"usuarioId": idUsuario}));
+          body: jsonEncode(
+              <String, dynamic>{"id": interes.id, "nombre": interes.nombre}));
       final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
       Map<String, dynamic> datosRespuesta = jsonDecode(respuestaDecodificada);
-      List<dynamic> errores = datosRespuesta["errores"];
+      List<dynamic> errores = datosRespuesta["mensajes"];
       if (errores.isNotEmpty) {
         // Hay errores
         print(errores);
         return 1;
-      } else {
-        // Se guardan las etiquetas en el controlador
-        List<dynamic> etiquetas = datosRespuesta["etiquetas"];
-        for (int i = 0; i < etiquetas.length; i++) {
-          Interes interes =
-              Interes(id: etiquetas[i]["id"], nombre: etiquetas[i]["nombre"]);
-          Controlador.listaInteresesUsuario.add(interes);
-        }
       }
     } catch (e) {
       // Errores en la ejecución

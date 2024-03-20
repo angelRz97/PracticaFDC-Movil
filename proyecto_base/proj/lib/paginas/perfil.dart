@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:proj/models/usuario.dart';
+import 'package:proj/utils/conexion_api.dart';
 
 import '../models/interes.dart';
 import '../utils/controlador.dart';
@@ -247,21 +248,30 @@ class _PerfilState extends State<Perfil> {
                     return ListTile(
                       leading: const Icon(Icons.add_circle_outline_sharp),
                       title: Text(interes.nombre),
-                      onTap: () {
-                        setState(() {
-                          bool incluido = false;
-                          for (int i = 0;
-                              i < interesesSeleccionados.length;
-                              i++) {
-                            if (interes.id == interesesSeleccionados[i].id) {
-                              incluido = true;
+                      onTap: () async {
+                        bool incluido = false;
+                        for (int i = 0;
+                            i < interesesSeleccionados.length;
+                            i++) {
+                          if (interes.id == interesesSeleccionados[i].id) {
+                            incluido = true;
+                            break;
+                          }
+                        }
+                        if (!incluido) {
+                          switch (await ConexionApi.insertarInteresUsuario(
+                              Controlador.usuario.id, interes)) {
+                            case 0:
+                              setState(() {
+                                Controlador.listaInteresesUsuario.add(interes);
+                              });
                               break;
-                            }
+                            case 1:
+                              break;
+                            case 2:
+                              break;
                           }
-                          if (!incluido) {
-                            interesesSeleccionados.add(interes);
-                          }
-                        });
+                        }
                       },
                     );
                   },
