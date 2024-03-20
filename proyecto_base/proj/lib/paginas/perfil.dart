@@ -31,7 +31,7 @@ class _PerfilState extends State<Perfil> {
   List<Interes> intereses = Controlador.listaIntereses;
 
   /// Lista de intereses que has seleccionado
-  List<Interes> interesesSeleccionados = [];
+  List<Interes> interesesSeleccionados = Controlador.listaInteresesUsuario;
 
   /// Texto default del estado del perfil
   String estado = Controlador.usuario.estado.name;
@@ -90,9 +90,17 @@ class _PerfilState extends State<Perfil> {
 
   Widget construirNombre(nombre, apellidos, email, telefono) => Column(
         children: [
-          Text(nombre + " " + apellidos, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24), textAlign: TextAlign.center,),
+          Text(
+            nombre + " " + apellidos,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 4),
-          Text(email, style: const TextStyle(color: Colors.grey, fontSize: 18), textAlign: TextAlign.center,),
+          Text(
+            email,
+            style: const TextStyle(color: Colors.grey, fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 4),
           RichText(
             text: TextSpan(
@@ -109,27 +117,24 @@ class _PerfilState extends State<Perfil> {
           ),
           const SizedBox(height: 10),
           SizedBox(
-            width: 200, 
-            child: ElevatedButton(
-              onPressed: () => Get.to(() => EditarPerfil()), 
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0750d8), 
-                side: BorderSide.none, 
-                shape: const StadiumBorder()
-              ), 
-              child: const Text('Editar Perfil', 
-                style: TextStyle(color: Colors.white),
-              )
-            )
-          ),
+              width: 200,
+              child: ElevatedButton(
+                  onPressed: () => Get.to(() => EditarPerfil()),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0750d8),
+                      side: BorderSide.none,
+                      shape: const StadiumBorder()),
+                  child: const Text(
+                    'Editar Perfil',
+                    style: TextStyle(color: Colors.white),
+                  ))),
           const SizedBox(height: 30),
           Container(
             padding: const EdgeInsets.only(
                 left: 120, right: 120, top: 10, bottom: 10),
             decoration: const BoxDecoration(
-              color: Color.fromRGBO(25, 5, 255, 1),
-              borderRadius: BorderRadius.all(Radius.circular(50))
-            ),
+                color: Color.fromRGBO(25, 5, 255, 1),
+                borderRadius: BorderRadius.all(Radius.circular(50))),
             child: const Text(
               'ESTADO',
               style: TextStyle(
@@ -171,12 +176,11 @@ class _PerfilState extends State<Perfil> {
           ),
           const SizedBox(height: 30),
           Container(
-            padding: const EdgeInsets.only(
-                left: 48, right: 48, top: 10, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 48, right: 48, top: 10, bottom: 10),
             decoration: const BoxDecoration(
-              color: Color.fromRGBO(25, 5, 255, 1),
-              borderRadius: BorderRadius.all(Radius.circular(50))
-            ),
+                color: Color.fromRGBO(25, 5, 255, 1),
+                borderRadius: BorderRadius.all(Radius.circular(50))),
             child: const Text(
               'LISTA DE INTERESES',
               style: TextStyle(
@@ -215,7 +219,7 @@ class _PerfilState extends State<Perfil> {
                 /// Setear función de la barra
                 onChanged: searchInteres,
               )),
-              const SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
               margin: const EdgeInsets.fromLTRB(30, 0, 30, 10),
 
@@ -245,7 +249,16 @@ class _PerfilState extends State<Perfil> {
                       title: Text(interes.nombre),
                       onTap: () {
                         setState(() {
-                          if (!interesesSeleccionados.contains(interes)) {
+                          bool incluido = false;
+                          for (int i = 0;
+                              i < interesesSeleccionados.length;
+                              i++) {
+                            if (interes.id == interesesSeleccionados[i].id) {
+                              incluido = true;
+                              break;
+                            }
+                          }
+                          if (!incluido) {
                             interesesSeleccionados.add(interes);
                           }
                         });
@@ -256,21 +269,21 @@ class _PerfilState extends State<Perfil> {
               )),
           const SizedBox(height: 20),
           if (interesesSeleccionados.isNotEmpty)
-          Container(
-            padding: const EdgeInsets.only(left: 48, right: 48, top: 10, bottom: 10),
-            decoration: const BoxDecoration(
-              color: Color.fromRGBO(25, 5, 255, 1),
-              borderRadius: BorderRadius.all(Radius.circular(50))
-            ),
-            child: const Text(
-              'INTERÉS EN',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: Colors.white,
+            Container(
+              padding: const EdgeInsets.only(
+                  left: 48, right: 48, top: 10, bottom: 10),
+              decoration: const BoxDecoration(
+                  color: Color.fromRGBO(25, 5, 255, 1),
+                  borderRadius: BorderRadius.all(Radius.circular(50))),
+              child: const Text(
+                'INTERÉS EN',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
           const SizedBox(height: 20),
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
@@ -280,25 +293,25 @@ class _PerfilState extends State<Perfil> {
             children: interesesSeleccionados.map((interest) {
               bool seleccionado = interesesSeleccionados.contains(interest);
               return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    if (seleccionado) {
-                      interesesSeleccionados.remove(interest);
-                    }
-                  });
-                }, 
-                child: Container(
-                  padding:  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF0750d8),
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: Text(
-                    interest.nombre,
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                )
-              );
+                  onTap: () {
+                    setState(() {
+                      if (seleccionado) {
+                        interesesSeleccionados.remove(interest);
+                      }
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0750d8),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Text(
+                      interest.nombre,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ));
             }).toList(),
           ),
           const SizedBox(height: 20),

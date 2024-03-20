@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
 import 'package:proj/models/formacionDTO.dart';
+import 'package:proj/utils/conexion_api.dart';
 import 'package:proj/utils/controlador.dart';
 
 import '../models/interes.dart';
@@ -73,7 +76,7 @@ class _FormacionState extends State<Formacion> {
 
   /// Metodo para el buscador
   void searchInterest(String query) {
-    final suggestions = formacion.where((interest) {
+    final suggestions = Controlador.listaFormaciones.where((interest) {
       final interestName = interest.titulo.toLowerCase();
       final input = query.toLowerCase();
 
@@ -228,8 +231,17 @@ class _FormacionState extends State<Formacion> {
           actions: <Widget>[
             /// Boton a espera de API
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                switch (await ConexionApi.inscribirFormacion(
+                    Controlador.usuario.id, interestName.id)) {
+                  case 0:
+                    Navigator.of(context).pop();
+                    break;
+                  case 1:
+                    break;
+                  case 2:
+                    break;
+                }
               },
               child: Text('Inscribirse'),
             ),

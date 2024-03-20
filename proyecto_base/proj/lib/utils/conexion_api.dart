@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:proj/models/formacionDTO.dart';
@@ -144,6 +145,7 @@ class ConexionApi {
       List<dynamic> errores = datosRespuesta["errores"];
       if (errores.isNotEmpty) {
         // Existen errores
+        print(errores);
         return 1;
       } else {
         // Se guardan las etiquetas en el controlador
@@ -156,6 +158,7 @@ class ConexionApi {
       }
     } catch (e) {
       // Error en la ejecución
+      print(e);
       return 2;
     }
     // Todo ok
@@ -230,22 +233,100 @@ class ConexionApi {
     return 0;
   }
 
-  // static Future<int> inscribirFormacio(int idUsuario, int idFormacion) async{
-  //   String peticion = "${url}api/formaciones/$idFormacion/inscripciones";
-  //   try {
-  //     // Se realiza la petición
-  //     final respuesta = await http.post(Uri.parse(peticion),
-  //         headers: <String, String>{
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //         },
-  //         body: jsonEncode(<String, dynamic>{
-  //           "usuario_id":idUsuario
-  //         }));
-  //     final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
-  //   }catch(e){
+  /// Inscribe al usuario que se le pase en la formación que se le pase.
+  static Future<int> inscribirFormacion(int idUsuario, int idFormacion) async {
+    String peticion = "${url}api/formaciones/$idFormacion/inscripciones";
+    try {
+      // Se realiza la petición
+      final respuesta = await http.post(Uri.parse(peticion),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{"usuarioId": idUsuario}));
+      final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
+      Map<String, dynamic> datosRespuesta = jsonDecode(respuestaDecodificada);
+      List<dynamic> errores = datosRespuesta["mensajes"];
+      if (errores.isNotEmpty) {
+        // Hay errores
+        return 1;
+      }
+    } catch (e) {
+      // Errores en la ejecución
+      print(e);
+      return 2;
+    }
+    // Todo ok
+    return 0;
+  }
 
-  //   }
-  // }
+  static Future<int> interesesUsuario(int idUsuario) async {
+    String peticion = "${url}api/usuarios/$idUsuario/intereses";
+    try {
+      // Se realiza la petición
+      final respuesta = await http.get(
+        Uri.parse(peticion),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
+      Map<String, dynamic> datosRespuesta = jsonDecode(respuestaDecodificada);
+      List<dynamic> errores = datosRespuesta["errores"];
+      if (errores.isNotEmpty) {
+        // Hay errores
+        print(errores);
+        return 1;
+      } else {
+        // Se guardan las etiquetas en el controlador
+        List<dynamic> etiquetas = datosRespuesta["etiquetas"];
+        for (int i = 0; i < etiquetas.length; i++) {
+          Interes interes =
+              Interes(id: etiquetas[i]["id"], nombre: etiquetas[i]["nombre"]);
+          Controlador.listaInteresesUsuario.add(interes);
+        }
+      }
+    } catch (e) {
+      // Errores en la ejecución
+      print(e);
+      return 2;
+    }
+    // Todo ok
+    return 0;
+  }
+
+  static Future<int> insertarInteresUsuario(int idUsuario) async {
+    String peticion = "${url}api/usuarios/$idUsuario/intereses";
+    try {
+      // Se realiza la petición
+      final respuesta = await http.post(Uri.parse(peticion),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{"usuarioId": idUsuario}));
+      final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
+      Map<String, dynamic> datosRespuesta = jsonDecode(respuestaDecodificada);
+      List<dynamic> errores = datosRespuesta["errores"];
+      if (errores.isNotEmpty) {
+        // Hay errores
+        print(errores);
+        return 1;
+      } else {
+        // Se guardan las etiquetas en el controlador
+        List<dynamic> etiquetas = datosRespuesta["etiquetas"];
+        for (int i = 0; i < etiquetas.length; i++) {
+          Interes interes =
+              Interes(id: etiquetas[i]["id"], nombre: etiquetas[i]["nombre"]);
+          Controlador.listaInteresesUsuario.add(interes);
+        }
+      }
+    } catch (e) {
+      // Errores en la ejecución
+      print(e);
+      return 2;
+    }
+    // Todo ok
+    return 0;
+  }
 
   static List<Interes> getIntereses(List<dynamic> listaIntereses) {
     List<Interes> lista = [];

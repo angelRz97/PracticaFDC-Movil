@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:proj/paginas/principal.dart';
+import 'package:proj/utils/controlador.dart';
 import 'package:proj/utils/controlador_encriptacion.dart';
 
 import '../utils/conexion_api.dart';
@@ -25,6 +26,7 @@ class LoginState extends State<Login> {
   bool compruebaLogin = false;
   bool etiquetas = false;
   bool novedades = false;
+  bool etiquetasUsuario = false;
 
   final formKey = GlobalKey<FormState>();
 
@@ -205,8 +207,10 @@ class LoginState extends State<Login> {
               formKey.currentState!.validate();
               if (contrasenaController.text.isNotEmpty ||
                   usuarioController.text.isNotEmpty) {
-                switch (await ConexionApi.login(usuarioController.text,
-                    ControladorEncriptacion.hashPassword(contrasenaController.text))) {
+                switch (await ConexionApi.login(
+                    usuarioController.text,
+                    ControladorEncriptacion.hashPassword(
+                        contrasenaController.text))) {
                   case 1:
                     //print("comprobación correcta");
                     setState(() {
@@ -265,7 +269,31 @@ class LoginState extends State<Login> {
                   }
                 }
 
-                if (compruebaLogin && etiquetas && novedades) {
+                if (novedades) {
+                  switch (await ConexionApi.interesesUsuario(
+                      Controlador.usuario.id)) {
+                    case 0:
+                      setState(() {
+                        etiquetasUsuario = true;
+                      });
+                      break;
+                    case 1:
+                      setState(() {
+                        etiquetasUsuario = false;
+                      });
+                      break;
+                    case 2:
+                      setState(() {
+                        etiquetasUsuario = false;
+                      });
+                      break;
+                  }
+                }
+
+                if (compruebaLogin &&
+                    etiquetas &&
+                    novedades &&
+                    etiquetasUsuario) {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => Principal()),
