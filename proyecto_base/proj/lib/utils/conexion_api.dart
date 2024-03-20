@@ -231,6 +231,8 @@ class ConexionApi {
     return 0;
   }
 
+  // static Future<int> inscribirFormacio()
+
   static List<Interes> getIntereses(List<dynamic> listaIntereses) {
     List<Interes> lista = [];
     for (int i = 0; i < listaIntereses.length; i++) {
