@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:proj/models/usuario.dart';
+import 'package:proj/utils/conexion_api.dart';
 
 import '../models/interes.dart';
 import '../utils/controlador.dart';
@@ -38,7 +37,7 @@ class _PerfilState extends State<Perfil> {
 
   @override
   Widget build(BuildContext context) {
-    if (Controlador.usuario.email == "admin") {
+    if (Controlador.usuario.email == "admin@admin") {
       return Column(
         children: [
           Container(
@@ -90,24 +89,46 @@ class _PerfilState extends State<Perfil> {
 
   Widget construirNombre(nombre, apellidos, email, telefono) => Column(
         children: [
+          // TextFormField(
+          //   controller: nombreController,
+          //   textAlign: TextAlign.center,
+          //   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          // ),
+          // const SizedBox(height: 4),
+          // TextFormField(
+          //   controller: apellidosController,
+          //   textAlign: TextAlign.center,
+          //   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          // ),
+          // const SizedBox(height: 4),
+          // TextFormField(
+          //   controller: emailController,
+          //   textAlign: TextAlign.center,
+          //   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          // ),
+          // const SizedBox(height: 4),
+          // TextFormField(
+          //   controller: telefonoController,
+          //   textAlign: TextAlign.center,
+          //   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          // ),
+          // const SizedBox(height: 20),
           Text(nombre + " " + apellidos, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24), textAlign: TextAlign.center,),
           const SizedBox(height: 4),
           Text(email, style: const TextStyle(color: Colors.grey, fontSize: 18), textAlign: TextAlign.center,),
           const SizedBox(height: 4),
-          RichText(
-            text: TextSpan(
-              children: [
-                const WidgetSpan(
-                  child: Icon(Icons.phone, size: 19),
-                ),
-                TextSpan(
-                  text: ' ' + telefono,
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
-                ),
-              ],
-            ),
-          ),
+          Text(telefono, style: const TextStyle(color: Colors.black, fontSize: 18), textAlign: TextAlign.center,),
           const SizedBox(height: 10),
+          // IconButton(
+          //   icon: const Icon(Icons.abc),
+          //   onPressed: () {
+          //     Controlador.usuario.nombre = nombreController.text;
+          //     Controlador.usuario.apellidos = apellidosController.text;
+          //     Controlador.usuario.email = emailController.text;
+          //     Controlador.usuario.telefono = telefonoController.text;
+          //     ConexionApi.actualizar();
+          //   },
+          // ),
           SizedBox(
             width: 200, 
             child: ElevatedButton(
