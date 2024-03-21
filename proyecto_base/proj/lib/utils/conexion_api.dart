@@ -11,7 +11,7 @@ import 'package:proj/utils/controlador_encriptacion.dart';
 
 /// Clase para realizar las peticiones a la API
 class ConexionApi {
-  static String url = "http://10.0.2.2:8080/";
+  static String url = "http://194.164.166.106/aulanosa/";
 
   /// Devuelve un entero en función del resultado de la petición de login a la api
   static Future<int> login(String email, String contrasena) async {
