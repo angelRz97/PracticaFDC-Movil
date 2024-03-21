@@ -23,6 +23,13 @@ class _principal extends State<Principal> {
   static int selectedIndex = 0;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    selectedIndex = 0;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

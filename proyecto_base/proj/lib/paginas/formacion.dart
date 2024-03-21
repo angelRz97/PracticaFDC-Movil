@@ -46,58 +46,59 @@ class _FormacionState extends State<Formacion> {
               final interest = interests[index];
 
               return InkWell(
-                /// Mostra detalle de formacion al clickar
-                onTap: () {
-                  _showInterestDialog(interest);
-                },
 
-                /// Cata en la que se muetra la imagen, titulo y descripcion de la formacion
-                child: Card(
-                  elevation: 4,
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Container(
-                          width: 80,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            //image: DecorationImage(
-                            //  image: AssetImage(interest.imagen),
-                            //  fit: BoxFit.fitWidth
-                            //)
-                            color: Colors.grey.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
+                  /// Mostra detalle de formacion al clickar
+                  onTap: () {
+                    _showInterestDialog(interest);
+                  },
+
+                  /// Cata en la que se muetra la imagen, titulo y descripcion de la formacion
+                  child: Card(
+                    elevation: 4,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: Container(
+                            width: 80,
+                            height: 100,
+                            decoration: BoxDecoration(
+                                //image: DecorationImage(
+                                //  image: AssetImage(interest.imagen),
+                                //  fit: BoxFit.fitWidth
+                                //)
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 3,
-                                blurRadius: 10,
-                                offset: const Offset(0,3)
-                              )
-                            ]
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 3,
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 3))
+                                ]),
                           ),
+                          title: const Text("CURSO"),
+                          subtitle: Text(interest.formacion.titulo),
+                          trailing: interest.inscrito
+                              ? const Icon(Icons.check_circle_outline_rounded,
+                                  color: Color.fromARGB(255, 0, 255, 34))
+                              : null,
                         ),
-                        title: const Text("CURSO"),
-                        subtitle: Text(interest.formacion.titulo),
-                        trailing: interest.inscrito ? const Icon(Icons.check_circle_outline_rounded, color: Color.fromARGB(255, 0, 255, 34)) : null,
-                      ),
-                      if (interest.interesado)
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        height: 5,
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Color(0xFF0750d8),
-                              width: 5,
+                        if (interest.interesado)
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            height: 5,
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Color(0xFF0750d8),
+                                  width: 5,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              );
+                      ],
+                    ),
+                  ));
             },
           ),
         )
@@ -265,24 +266,26 @@ class _FormacionState extends State<Formacion> {
             /// Boton a espera de API
             TextButton(
               onPressed: () async {
-                switch (await ConexionApi.inscribirFormacion(
-                    Controlador.usuario.id, interestName.formacion.id)) {
-                  case 0:
-                    Navigator.of(context).pop();
-                    break;
-                  case 1:
-                    break;
-                  case 2:
-                    break;
+                if (!interestName.inscrito) {
+                  switch (await ConexionApi.inscribirFormacion(
+                      Controlador.usuario.id, interestName.formacion.id)) {
+                    case 0:
+                      Navigator.of(context).pop();
+                      break;
+                    case 1:
+                      break;
+                    case 2:
+                      break;
+                  }
                 }
               },
-              child: interestName.inscrito ? Text('Desuscribirse') : Text('Inscribirse'),
+              child: interestName.inscrito
+                  ? Text('Desuscribirse')
+                  : Text('Inscribirse'),
             ),
             TextButton(
               onPressed: () {
-                if (!interestName.inscrito) {
-                  Navigator.of(context).pop();
-                }
+                Navigator.of(context).pop();
               },
               child: Text('Close'),
             ),

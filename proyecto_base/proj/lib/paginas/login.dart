@@ -343,7 +343,7 @@ class LoginState extends State<Login> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: Text(
-                    'ACCEDER',
+                    'ACCEDER ',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
