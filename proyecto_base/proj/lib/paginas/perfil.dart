@@ -16,7 +16,6 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
-
   @override
   void initState() {
     if (Controlador.usuario.email == 'admin') {
@@ -58,9 +57,8 @@ class _PerfilState extends State<Perfil> {
                   width: 50,
                   height: 50,
                   decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color.fromRGBO(217, 217, 217, 1)
-                  ),
+                      shape: BoxShape.circle,
+                      color: Color.fromRGBO(217, 217, 217, 1)),
                   child: const Icon(Icons.cases_rounded),
                 ),
                 onTap: () {
@@ -72,9 +70,8 @@ class _PerfilState extends State<Perfil> {
                 width: 50,
                 height: 50,
                 decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromRGBO(217, 217, 217, 1)
-                ),
+                    shape: BoxShape.circle,
+                    color: Color.fromRGBO(217, 217, 217, 1)),
                 child: const Icon(Icons.school),
               ),
               const SizedBox(width: 40),
@@ -82,9 +79,8 @@ class _PerfilState extends State<Perfil> {
                 width: 50,
                 height: 50,
                 decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromRGBO(217, 217, 217, 1)
-                ),
+                    shape: BoxShape.circle,
+                    color: Color.fromRGBO(217, 217, 217, 1)),
                 child: const Icon(Icons.person),
               )
             ],
@@ -107,9 +103,9 @@ class _PerfilState extends State<Perfil> {
             child: ListView.builder(
               itemCount: 1,
               itemBuilder: (context, index) {
-                return const ListTile(
+                return ListTile(
                   leading: Icon(Icons.person),
-                  title: Text("Controlador.usuario.usuario"),
+                  title: Text(Controlador.usuario.usuario),
                 );
               },
             ),
@@ -195,13 +191,11 @@ class _PerfilState extends State<Perfil> {
           ),
           const SizedBox(height: 20),
           Container(
-            padding: const EdgeInsets.only(
-              left: 48, right: 48, top: 10, bottom: 10
-            ),
+            padding:
+                const EdgeInsets.only(left: 48, right: 48, top: 10, bottom: 10),
             decoration: const BoxDecoration(
-              color: Color.fromRGBO(255, 0, 0, 1),
-              borderRadius: BorderRadius.all(Radius.circular(5))
-            ),
+                color: Color.fromRGBO(255, 0, 0, 1),
+                borderRadius: BorderRadius.all(Radius.circular(5))),
             child: Text(
               Controlador.usuario.estado.name,
               style: const TextStyle(
