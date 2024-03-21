@@ -224,7 +224,6 @@ class ConexionApi {
       }
     } catch (e) {
       // Hubo errores en la ejecución
-      print(e);
       return 2;
     }
     // Todo correcto

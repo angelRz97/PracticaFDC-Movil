@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:proj/models/usuario.dart';
+import 'package:proj/paginas/login.dart';
 import 'package:proj/utils/conexion_api.dart';
 
 import '../models/interes.dart';
@@ -120,6 +121,37 @@ class _PerfilState extends State<Perfil> {
       return ListView(
         physics: const BouncingScrollPhysics(),
         children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 255.0, top: 10.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.to(Login());
+                Controlador.usuario.id = 0;
+                Controlador.usuario.nombre = '';
+                Controlador.usuario.apellidos = '';
+                Controlador.usuario.contrasena = '';
+                Controlador.usuario.email = '';
+                Controlador.usuario.telefono = '';
+                Controlador.usuario.estado = Estado.DESEMPLEADO;
+                Controlador.usuario.imagen = null;
+                Controlador.usuario.actualizacion = DateTime.now();
+              },
+              child: const Row(
+                children: [
+                  Text(
+                    'Cerrar Sesión ',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Icon(Icons.logout, color: Color.fromARGB(255, 255, 0, 0)),
+                  SizedBox(width: 5),
+                ],
+              ),
+            ),
+          ),
           const SizedBox(height: 30),
 
           /// Funcion para construir la imagen y poder editar la imagen
