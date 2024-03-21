@@ -10,5 +10,5 @@ class Controlador {
   static List<Interes> listaIntereses = [];
   static List<OfertaDTO> listaOfertas = [];
   static List<FormacionDTO> listaFormaciones = [];
-  static List<Usuario> listaUsuarios = [];
+  static List<Interes> listaInteresesUsuario = [];
 }
