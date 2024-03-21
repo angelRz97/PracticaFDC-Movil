@@ -125,7 +125,7 @@ class _PerfilState extends State<Perfil> {
             padding: const EdgeInsets.only(left: 255.0, top: 10.0),
             child: GestureDetector(
               onTap: () {
-                Get.to(Login());
+                Navigator.of(context).pushReplacementNamed('/login');
                 Controlador.usuario.id = 0;
                 Controlador.usuario.nombre = '';
                 Controlador.usuario.apellidos = '';

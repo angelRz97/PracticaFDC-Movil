@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:proj/models/formacionDTO.dart';
 import 'package:proj/utils/controlador.dart';
 
@@ -50,19 +51,49 @@ class _FormacionState extends State<Formacion> {
 
                 /// Cata en la que se muetra la imagen, titulo y descripcion de la formacion
                 child: Card(
-                  child: ListTile(
-                    leading: Container(
-                      width: 80,
-                      height: 100,
-                      // decoration: BoxDecoration(
-                      //     image: DecorationImage(
-                      //         image: AssetImage(interest.imagen),
-                      //         fit: BoxFit.fitWidth)),
-                    ),
-                    title: Text("CURSO"),
-                    subtitle: Text(interest.titulo),
+                  elevation: 4,
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Container(
+                          width: 80,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            //image: DecorationImage(
+                            //  image: AssetImage(interest.imagen),
+                            //  fit: BoxFit.fitWidth
+                            //)
+                            color: Colors.grey.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 3,
+                                blurRadius: 10,
+                                offset: const Offset(0,3)
+                              )
+                            ]
+                          ),
+                        ),
+                        title: const Text("CURSO"),
+                        subtitle: Text(interest.titulo),
+                        trailing: const Icon(Icons.check_circle_outline_rounded, color: Color.fromARGB(255, 0, 255, 34)),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        height: 5,
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Color(0xFF0750d8),
+                              width: 5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               );
             },
           ),
@@ -89,7 +120,7 @@ class _FormacionState extends State<Formacion> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("DETALLE FORMACION",
+          title: const Text("DETALLE FORMACION",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               )),
@@ -98,7 +129,7 @@ class _FormacionState extends State<Formacion> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// Titulo de la formacion y vacantes
-                Row(
+                const Row(
                   children: [
                     Text("TITULO",
                         style: TextStyle(
@@ -116,35 +147,35 @@ class _FormacionState extends State<Formacion> {
                 Container(
                   width: 300,
                   height: 50,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 185, 185, 185),
+                      color: const Color.fromARGB(255, 185, 185, 185),
                       borderRadius: BorderRadius.circular(10)),
                   child: SingleChildScrollView(
                       child: Text(interestName.titulo,
                           textAlign: TextAlign.justify)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
                 /// Descripcion de la formacion
-                Text("DESCRIPCION",
+                const Text("DESCRIPCION",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     )),
                 Container(
                   width: 300,
                   height: 300,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 185, 185, 185),
+                      color: const Color.fromARGB(255, 185, 185, 185),
                       borderRadius: BorderRadius.circular(10)),
                   child: SingleChildScrollView(
                       child: Text(interestName.descripcion,
                           textAlign: TextAlign.justify)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
@@ -169,16 +200,16 @@ class _FormacionState extends State<Formacion> {
                 // ),
 
                 /// fechas de incio y final del las formaciones
-                Text("DURACION DEL CURSO",
+                const Text("DURACION DEL CURSO",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     )),
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 185, 185, 185),
+                          color: const Color.fromARGB(255, 185, 185, 185),
                           borderRadius: BorderRadius.circular(5)),
                       child: Center(
                         child: Text("Inicio: " +
@@ -189,13 +220,13 @@ class _FormacionState extends State<Formacion> {
                             interestName.fechaInicio.year.toString()),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Container(
-                      padding: EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 185, 185, 185),
+                          color: const Color.fromARGB(255, 185, 185, 185),
                           borderRadius: BorderRadius.circular(5)),
                       child: Center(
                         child: Text("Fin: " +
@@ -208,12 +239,12 @@ class _FormacionState extends State<Formacion> {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
                 /// Etiquetas dde intereses
-                Text("INTERESES",
+                const Text("INTERESES",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     )),
@@ -231,13 +262,13 @@ class _FormacionState extends State<Formacion> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Inscribirse'),
+              child: const Text('Inscribirse'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Close'),
+              child: const Text('Close'),
             ),
           ],
         );
@@ -255,13 +286,13 @@ class _FormacionState extends State<Formacion> {
 
             /// Etiqueta
             Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                  color: Color.fromRGBO(25, 5, 255, 1),
+                  color: const Color.fromRGBO(25, 5, 255, 1),
                   borderRadius: BorderRadius.circular(5)),
               child: Text(
                 etiqueta[i].nombre,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
         ]);
