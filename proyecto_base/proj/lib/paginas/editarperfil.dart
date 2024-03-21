@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:proj/paginas/principal.dart';
 import 'package:proj/utils/controlador_encriptacion.dart';
 
+import '../models/usuario.dart';
 import '../utils/conexion_api.dart';
 import '../utils/controlador.dart';
 
@@ -29,7 +31,8 @@ class _EditarPerfilState extends State<EditarPerfil> {
 
   /// Controlador de introducción de texto
   final controller = TextEditingController();
-
+  /// Texto default del estado del perfil
+  String estado = Controlador.usuario.estado.name;
 
   @override
   Widget build(BuildContext context) {
@@ -273,6 +276,31 @@ class _EditarPerfilState extends State<EditarPerfil> {
                       },
                     ),
                     const SizedBox(height: 30),
+                    DropdownButton<String>(
+                      padding: const EdgeInsets.only(right: 50, left: 50),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      value: estado,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          estado = newValue!;
+                        });
+                      },
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: Color.fromRGBO(25, 5, 255, 1)),
+                      iconSize: 50,
+                      items: [Estado.DESEMPLEADO.name, Estado.EMPLEADO.name]
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 30),
                     SizedBox(
                       width: 200,
                       height: 50,
@@ -293,9 +321,10 @@ class _EditarPerfilState extends State<EditarPerfil> {
                                   Controlador.usuario.telefono = telefonoController.text;
                                   Controlador.usuario.email = emailController.text;
                                   Controlador.usuario.contrasena = ControladorEncriptacion.hashPassword(contrasenaController.text);
+                                  Controlador.usuario.estado = estado == Estado.DESEMPLEADO.name ? Estado.DESEMPLEADO : Estado.EMPLEADO;
                                   // Controlador.usuario.imagen = 
                                   ConexionApi.actualizar();
-                                  Navigator.of(context).pop();
+                                  Get.to(Principal());
                                 });
                               }
                             }

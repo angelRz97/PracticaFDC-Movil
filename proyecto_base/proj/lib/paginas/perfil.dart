@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:proj/models/usuario.dart';
+import 'package:proj/utils/conexion_api.dart';
 
 import '../models/interes.dart';
 import '../utils/controlador.dart';
@@ -15,6 +16,15 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
+
+  @override
+  void initState() {
+    if (Controlador.usuario.email == 'admin') {
+      ConexionApi.recuperaUsuarios();
+    }
+    super.initState();
+  }
+
   final nombreController =
       TextEditingController(text: Controlador.usuario.nombre);
   final apellidosController =
@@ -29,18 +39,57 @@ class _PerfilState extends State<Perfil> {
 
   /// Lista general de intereses
   List<Interes> intereses = Controlador.listaIntereses;
+  List<Usuario> usuarios = Controlador.listaUsuarios;
 
   /// Lista de intereses que has seleccionado
   List<Interes> interesesSeleccionados = [];
-
-  /// Texto default del estado del perfil
-  String estado = Controlador.usuario.estado.name;
 
   @override
   Widget build(BuildContext context) {
     if (Controlador.usuario.email == "admin") {
       return Column(
         children: [
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromRGBO(217, 217, 217, 1)
+                  ),
+                  child: const Icon(Icons.cases_rounded),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/crearOferta');
+                },
+              ),
+              const SizedBox(width: 40),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.fromRGBO(217, 217, 217, 1)
+                ),
+                child: const Icon(Icons.school),
+              ),
+              const SizedBox(width: 40),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.fromRGBO(217, 217, 217, 1)
+                ),
+                child: const Icon(Icons.person),
+              )
+            ],
+          ),
+          const SizedBox(height: 10),
           Container(
             margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
             child: TextField(
@@ -141,32 +190,20 @@ class _PerfilState extends State<Perfil> {
           ),
           const SizedBox(height: 20),
           Container(
-            padding: const EdgeInsets.only(left: 35, right: 20),
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 206, 206, 206),
+            padding: const EdgeInsets.only(
+              left: 48, right: 48, top: 10, bottom: 10
             ),
-            child: DropdownButton<String>(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              value: estado,
-              onChanged: (String? newValue) {
-                setState(() {
-                  estado = newValue!;
-                });
-              },
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(255, 0, 0, 1),
+              borderRadius: BorderRadius.all(Radius.circular(5))
+            ),
+            child: Text(
+              Controlador.usuario.estado.name,
               style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
-              icon: const Icon(Icons.arrow_drop_down,
-                  color: Color.fromRGBO(25, 5, 255, 1)),
-              iconSize: 50,
-              items: [Estado.DESEMPLEADO.name, Estado.EMPLEADO.name]
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Colors.white,
+              ),
             ),
           ),
           const SizedBox(height: 30),
@@ -319,6 +356,22 @@ class _PerfilState extends State<Perfil> {
         return nombreInteres.contains(input);
       }).toList();
       setState(() => intereses = sugerencias);
+    }
+  }
+
+  void searchUsuarios(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        usuarios = Controlador.listaUsuarios;
+      });
+    } else {
+      final sugerenciasUsuario = usuarios.where((usuario) {
+        final nombreUsuario = usuario.nombre.toLowerCase();
+        final input = query.toLowerCase();
+
+        return nombreUsuario.contains(input);
+      }).toList();
+      setState(() => usuarios = sugerenciasUsuario);
     }
   }
 }
