@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_interpolation_to_compose_strings
 
 import 'package:flutter/material.dart';
-import 'package:proj/models/formacionDTO.dart';
 import 'package:proj/models/formacionUsuario.dart';
 import 'package:proj/utils/conexion_api.dart';
 import 'package:proj/utils/controlador.dart';
@@ -54,19 +53,50 @@ class _FormacionState extends State<Formacion> {
 
                 /// Cata en la que se muetra la imagen, titulo y descripcion de la formacion
                 child: Card(
-                  child: ListTile(
-                    leading: Container(
-                      width: 80,
-                      height: 100,
-                      // decoration: BoxDecoration(
-                      //     image: DecorationImage(
-                      //         image: AssetImage(interest.imagen),
-                      //         fit: BoxFit.fitWidth)),
-                    ),
-                    title: Text("CURSO"),
-                    subtitle: Text(interest.formacion.titulo),
+                  elevation: 4,
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Container(
+                          width: 80,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            //image: DecorationImage(
+                            //  image: AssetImage(interest.imagen),
+                            //  fit: BoxFit.fitWidth
+                            //)
+                            color: Colors.grey.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 3,
+                                blurRadius: 10,
+                                offset: const Offset(0,3)
+                              )
+                            ]
+                          ),
+                        ),
+                        title: const Text("CURSO"),
+                        subtitle: Text(interest.formacion.titulo),
+                        trailing: interest.inscrito ? const Icon(Icons.check_circle_outline_rounded, color: Color.fromARGB(255, 0, 255, 34)) : null,
+                      ),
+                      if (interest.interesado)
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        height: 5,
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Color(0xFF0750d8),
+                              width: 5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               );
             },
           ),
@@ -246,11 +276,13 @@ class _FormacionState extends State<Formacion> {
                     break;
                 }
               },
-              child: Text('Inscribirse'),
+              child: interestName.inscrito ? Text('Desuscribirse') : Text('Inscribirse'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                if (!interestName.inscrito) {
+                  Navigator.of(context).pop();
+                }
               },
               child: Text('Close'),
             ),

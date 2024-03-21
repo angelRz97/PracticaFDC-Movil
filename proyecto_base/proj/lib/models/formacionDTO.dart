@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:proj/models/interes.dart';
 import 'package:proj/models/ofertaDTO.dart';
-import 'package:proj/utils/controlador.dart';
 
 /// clase que representa una formacion
 class FormacionDTO {

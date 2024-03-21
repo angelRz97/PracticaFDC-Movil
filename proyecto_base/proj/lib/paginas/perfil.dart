@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:proj/models/usuario.dart';
+import 'package:proj/paginas/crearOferta.dart';
 import 'package:proj/utils/conexion_api.dart';
 
 import '../models/interes.dart';
@@ -16,6 +17,7 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
+
   @override
   void initState() {
     if (Controlador.usuario.email == 'admin') {
@@ -41,7 +43,7 @@ class _PerfilState extends State<Perfil> {
   List<Usuario> usuarios = Controlador.listaUsuarios;
 
   /// Lista de intereses que has seleccionado
-  List<Interes> interesesSeleccionados = Controlador.listaInteresesUsuario;
+  List<Interes> interesesSeleccionados = [];
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +59,13 @@ class _PerfilState extends State<Perfil> {
                   width: 50,
                   height: 50,
                   decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromRGBO(217, 217, 217, 1)),
+                    shape: BoxShape.circle,
+                    color: Color.fromRGBO(217, 217, 217, 1)
+                  ),
                   child: const Icon(Icons.cases_rounded),
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed('/crearOferta');
+                  Get.to(CrearOferta());
                 },
               ),
               const SizedBox(width: 40),
@@ -70,8 +73,9 @@ class _PerfilState extends State<Perfil> {
                 width: 50,
                 height: 50,
                 decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color.fromRGBO(217, 217, 217, 1)),
+                  shape: BoxShape.circle,
+                  color: Color.fromRGBO(217, 217, 217, 1)
+                ),
                 child: const Icon(Icons.school),
               ),
               const SizedBox(width: 40),
@@ -79,8 +83,9 @@ class _PerfilState extends State<Perfil> {
                 width: 50,
                 height: 50,
                 decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color.fromRGBO(217, 217, 217, 1)),
+                  shape: BoxShape.circle,
+                  color: Color.fromRGBO(217, 217, 217, 1)
+                ),
                 child: const Icon(Icons.person),
               )
             ],
@@ -103,9 +108,9 @@ class _PerfilState extends State<Perfil> {
             child: ListView.builder(
               itemCount: 1,
               itemBuilder: (context, index) {
-                return ListTile(
+                return const ListTile(
                   leading: Icon(Icons.person),
-                  title: Text(Controlador.usuario.usuario),
+                  title: Text("Controlador.usuario.usuario"),
                 );
               },
             ),
@@ -116,6 +121,37 @@ class _PerfilState extends State<Perfil> {
       return ListView(
         physics: const BouncingScrollPhysics(),
         children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 255.0, top: 10.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed('/login');
+                Controlador.usuario.id = 0;
+                Controlador.usuario.nombre = '';
+                Controlador.usuario.apellidos = '';
+                Controlador.usuario.contrasena = '';
+                Controlador.usuario.email = '';
+                Controlador.usuario.telefono = '';
+                Controlador.usuario.estado = Estado.DESEMPLEADO;
+                Controlador.usuario.imagen = null;
+                Controlador.usuario.actualizacion = DateTime.now();
+              },
+              child: const Row(
+                children: [
+                  Text(
+                    'Cerrar Sesión ',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Icon(Icons.logout, color: Color.fromARGB(255, 255, 0, 0)),
+                  SizedBox(width: 5),
+                ],
+              ),
+            ),
+          ),
           const SizedBox(height: 30),
 
           /// Funcion para construir la imagen y poder editar la imagen
@@ -135,17 +171,9 @@ class _PerfilState extends State<Perfil> {
 
   Widget construirNombre(nombre, apellidos, email, telefono) => Column(
         children: [
-          Text(
-            nombre + " " + apellidos,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-            textAlign: TextAlign.center,
-          ),
+          Text(nombre + " " + apellidos, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24), textAlign: TextAlign.center,),
           const SizedBox(height: 4),
-          Text(
-            email,
-            style: const TextStyle(color: Colors.grey, fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
+          Text(email, style: const TextStyle(color: Colors.grey, fontSize: 18), textAlign: TextAlign.center,),
           const SizedBox(height: 4),
           RichText(
             text: TextSpan(
@@ -162,24 +190,27 @@ class _PerfilState extends State<Perfil> {
           ),
           const SizedBox(height: 10),
           SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                  onPressed: () => Get.to(() => EditarPerfil()),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0750d8),
-                      side: BorderSide.none,
-                      shape: const StadiumBorder()),
-                  child: const Text(
-                    'Editar Perfil',
-                    style: TextStyle(color: Colors.white),
-                  ))),
+            width: 200, 
+            child: ElevatedButton(
+              onPressed: () => Get.to(() => EditarPerfil()), 
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0750d8), 
+                side: BorderSide.none, 
+                shape: const StadiumBorder()
+              ), 
+              child: const Text('Editar Perfil', 
+                style: TextStyle(color: Colors.white),
+              )
+            )
+          ),
           const SizedBox(height: 30),
           Container(
             padding: const EdgeInsets.only(
                 left: 120, right: 120, top: 10, bottom: 10),
             decoration: const BoxDecoration(
-                color: Color.fromRGBO(25, 5, 255, 1),
-                borderRadius: BorderRadius.all(Radius.circular(50))),
+              color: Color.fromRGBO(25, 5, 255, 1),
+              borderRadius: BorderRadius.all(Radius.circular(50))
+            ),
             child: const Text(
               'ESTADO',
               style: TextStyle(
@@ -191,11 +222,13 @@ class _PerfilState extends State<Perfil> {
           ),
           const SizedBox(height: 20),
           Container(
-            padding:
-                const EdgeInsets.only(left: 48, right: 48, top: 10, bottom: 10),
+            padding: const EdgeInsets.only(
+              left: 48, right: 48, top: 10, bottom: 10
+            ),
             decoration: const BoxDecoration(
-                color: Color.fromRGBO(255, 0, 0, 1),
-                borderRadius: BorderRadius.all(Radius.circular(5))),
+              color: Color.fromRGBO(255, 0, 0, 1),
+              borderRadius: BorderRadius.all(Radius.circular(5))
+            ),
             child: Text(
               Controlador.usuario.estado.name,
               style: const TextStyle(
@@ -207,11 +240,12 @@ class _PerfilState extends State<Perfil> {
           ),
           const SizedBox(height: 30),
           Container(
-            padding:
-                const EdgeInsets.only(left: 48, right: 48, top: 10, bottom: 10),
+            padding: const EdgeInsets.only(
+                left: 48, right: 48, top: 10, bottom: 10),
             decoration: const BoxDecoration(
-                color: Color.fromRGBO(25, 5, 255, 1),
-                borderRadius: BorderRadius.all(Radius.circular(50))),
+              color: Color.fromRGBO(25, 5, 255, 1),
+              borderRadius: BorderRadius.all(Radius.circular(50))
+            ),
             child: const Text(
               'LISTA DE INTERESES',
               style: TextStyle(
@@ -250,7 +284,7 @@ class _PerfilState extends State<Perfil> {
                 /// Setear función de la barra
                 onChanged: searchInteres,
               )),
-          const SizedBox(height: 10),
+              const SizedBox(height: 10),
           Container(
               margin: const EdgeInsets.fromLTRB(30, 0, 30, 10),
 
@@ -278,30 +312,12 @@ class _PerfilState extends State<Perfil> {
                     return ListTile(
                       leading: const Icon(Icons.add_circle_outline_sharp),
                       title: Text(interes.nombre),
-                      onTap: () async {
-                        bool incluido = false;
-                        for (int i = 0;
-                            i < interesesSeleccionados.length;
-                            i++) {
-                          if (interes.id == interesesSeleccionados[i].id) {
-                            incluido = true;
-                            break;
+                      onTap: () {
+                        setState(() {
+                          if (!interesesSeleccionados.contains(interes)) {
+                            interesesSeleccionados.add(interes);
                           }
-                        }
-                        if (!incluido) {
-                          switch (await ConexionApi.insertarInteresUsuario(
-                              Controlador.usuario.id, interes)) {
-                            case 0:
-                              setState(() {
-                                Controlador.listaInteresesUsuario.add(interes);
-                              });
-                              break;
-                            case 1:
-                              break;
-                            case 2:
-                              break;
-                          }
-                        }
+                        });
                       },
                     );
                   },
@@ -309,21 +325,21 @@ class _PerfilState extends State<Perfil> {
               )),
           const SizedBox(height: 20),
           if (interesesSeleccionados.isNotEmpty)
-            Container(
-              padding: const EdgeInsets.only(
-                  left: 48, right: 48, top: 10, bottom: 10),
-              decoration: const BoxDecoration(
-                  color: Color.fromRGBO(25, 5, 255, 1),
-                  borderRadius: BorderRadius.all(Radius.circular(50))),
-              child: const Text(
-                'INTERÉS EN',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
+          Container(
+            padding: const EdgeInsets.only(left: 48, right: 48, top: 10, bottom: 10),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(25, 5, 255, 1),
+              borderRadius: BorderRadius.all(Radius.circular(50))
+            ),
+            child: const Text(
+              'INTERÉS EN',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Colors.white,
               ),
             ),
+          ),
           const SizedBox(height: 20),
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
@@ -333,25 +349,25 @@ class _PerfilState extends State<Perfil> {
             children: interesesSeleccionados.map((interest) {
               bool seleccionado = interesesSeleccionados.contains(interest);
               return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (seleccionado) {
-                        interesesSeleccionados.remove(interest);
-                      }
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 4.0),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0750d8),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Text(
-                      interest.nombre,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ));
+                onTap: () {
+                  setState(() {
+                    if (seleccionado) {
+                      interesesSeleccionados.remove(interest);
+                    }
+                  });
+                }, 
+                child: Container(
+                  padding:  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0750d8),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Text(
+                    interest.nombre,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                )
+              );
             }).toList(),
           ),
           const SizedBox(height: 20),
