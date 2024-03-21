@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:proj/models/formacionDTO.dart';
+import 'package:proj/models/formacionUsuario.dart';
 import 'package:proj/utils/conexion_api.dart';
 import 'package:proj/utils/controlador.dart';
 
@@ -19,7 +20,7 @@ class _FormacionState extends State<Formacion> {
   final controller = TextEditingController();
 
   /// lista de Formacion
-  List<FormacionDTO> interests = Controlador.listaFormaciones;
+  List<FormacionUsuario> interests = Controlador.listaFormacionesConInteres;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class _FormacionState extends State<Formacion> {
                       //         fit: BoxFit.fitWidth)),
                     ),
                     title: Text("CURSO"),
-                    subtitle: Text(interest.titulo),
+                    subtitle: Text(interest.formacion.titulo),
                   ),
                 ),
               );
@@ -76,8 +77,9 @@ class _FormacionState extends State<Formacion> {
 
   /// Metodo para el buscador
   void searchInterest(String query) {
-    final suggestions = Controlador.listaFormaciones.where((interest) {
-      final interestName = interest.titulo.toLowerCase();
+    final suggestions =
+        Controlador.listaFormacionesConInteres.where((interest) {
+      final interestName = interest.formacion.titulo.toLowerCase();
       final input = query.toLowerCase();
 
       return interestName.contains(input);
@@ -87,7 +89,7 @@ class _FormacionState extends State<Formacion> {
   }
 
   // Metodo para mostrar los detalles de una formacion
-  void _showInterestDialog(FormacionDTO interestName) {
+  void _showInterestDialog(FormacionUsuario interestName) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -124,7 +126,7 @@ class _FormacionState extends State<Formacion> {
                       color: Color.fromARGB(255, 185, 185, 185),
                       borderRadius: BorderRadius.circular(10)),
                   child: SingleChildScrollView(
-                      child: Text(interestName.titulo,
+                      child: Text(interestName.formacion.titulo,
                           textAlign: TextAlign.justify)),
                 ),
                 SizedBox(
@@ -144,7 +146,7 @@ class _FormacionState extends State<Formacion> {
                       color: Color.fromARGB(255, 185, 185, 185),
                       borderRadius: BorderRadius.circular(10)),
                   child: SingleChildScrollView(
-                      child: Text(interestName.descripcion,
+                      child: Text(interestName.formacion.descripcion,
                           textAlign: TextAlign.justify)),
                 ),
                 SizedBox(
@@ -185,11 +187,12 @@ class _FormacionState extends State<Formacion> {
                           borderRadius: BorderRadius.circular(5)),
                       child: Center(
                         child: Text("Inicio: " +
-                            interestName.fechaInicio.day.toString() +
+                            interestName.formacion.fechaInicio.day.toString() +
                             "/" +
-                            interestName.fechaInicio.month.toString() +
+                            interestName.formacion.fechaInicio.month
+                                .toString() +
                             "/" +
-                            interestName.fechaInicio.year.toString()),
+                            interestName.formacion.fechaInicio.year.toString()),
                       ),
                     ),
                     SizedBox(
@@ -202,11 +205,11 @@ class _FormacionState extends State<Formacion> {
                           borderRadius: BorderRadius.circular(5)),
                       child: Center(
                         child: Text("Fin: " +
-                            interestName.fechaFin.day.toString() +
+                            interestName.formacion.fechaFin.day.toString() +
                             "/" +
-                            interestName.fechaFin.month.toString() +
+                            interestName.formacion.fechaFin.month.toString() +
                             "/" +
-                            interestName.fechaFin.year.toString()),
+                            interestName.formacion.fechaFin.year.toString()),
                       ),
                     )
                   ],
@@ -222,7 +225,7 @@ class _FormacionState extends State<Formacion> {
                     )),
 
                 /// Lista provisional de etiquetas a espera de la API
-                listaEtiquetas(interestName.intereses),
+                listaEtiquetas(interestName.formacion.intereses),
               ],
             ),
           ),
@@ -233,7 +236,7 @@ class _FormacionState extends State<Formacion> {
             TextButton(
               onPressed: () async {
                 switch (await ConexionApi.inscribirFormacion(
-                    Controlador.usuario.id, interestName.id)) {
+                    Controlador.usuario.id, interestName.formacion.id)) {
                   case 0:
                     Navigator.of(context).pop();
                     break;

@@ -1,4 +1,5 @@
 import 'package:proj/models/formacionDTO.dart';
+import 'package:proj/models/formacionUsuario.dart';
 import 'package:proj/models/interes.dart';
 import 'package:proj/models/usuario.dart';
 
@@ -10,5 +11,7 @@ class Controlador {
   static List<Interes> listaIntereses = [];
   static List<OfertaDTO> listaOfertas = [];
   static List<FormacionDTO> listaFormaciones = [];
+  static List<FormacionUsuario> listaFormacionesConInteres = [];
   static List<Interes> listaInteresesUsuario = [];
+  static List<Usuario> listaUsuarios = [];
 }

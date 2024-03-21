@@ -27,6 +27,7 @@ class LoginState extends State<Login> {
   bool etiquetas = false;
   bool novedades = false;
   bool etiquetasUsuario = false;
+  bool formacionesConInteres = false;
 
   final formKey = GlobalKey<FormState>();
 
@@ -290,10 +291,32 @@ class LoginState extends State<Login> {
                   }
                 }
 
+                if (etiquetasUsuario) {
+                  switch (await ConexionApi.formacionesConInteres(
+                      Controlador.usuario.id)) {
+                    case 1:
+                      setState(() {
+                        formacionesConInteres = false;
+                      });
+                      break;
+                    case 2:
+                      setState(() {
+                        formacionesConInteres = false;
+                      });
+                      break;
+                    case 0:
+                      setState(() {
+                        formacionesConInteres = true;
+                      });
+                      break;
+                  }
+                }
+
                 if (compruebaLogin &&
                     etiquetas &&
                     novedades &&
-                    etiquetasUsuario) {
+                    etiquetasUsuario &&
+                    formacionesConInteres) {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => Principal()),

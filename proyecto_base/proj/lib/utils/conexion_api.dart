@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:proj/models/formacionDTO.dart';
+import 'package:proj/models/formacionUsuario.dart';
 import 'package:proj/models/interes.dart';
 import 'package:proj/models/ofertaDTO.dart';
 import 'package:proj/models/usuario.dart';
@@ -324,19 +325,6 @@ class ConexionApi {
     return 0;
   }
 
-  static List<Interes> getIntereses(List<dynamic> listaIntereses) {
-    List<Interes> lista = [];
-    for (int i = 0; i < listaIntereses.length; i++) {
-      for (int x = 0; x < Controlador.listaIntereses.length; x++) {
-        if (Controlador.listaIntereses[x].id == int.parse(listaIntereses[i])) {
-          lista.add(Controlador.listaIntereses[x]);
-          break;
-        }
-      }
-    }
-    return lista;
-  }
-
   /// Metodo para recuperar la lista de todos los usuarios de la bd. Devuelve un entero en función del resultado.
   static Future<int> recuperaUsuarios() async {
     String peticion = "${url}api/admin/usuarios/listar";
@@ -360,17 +348,20 @@ class ConexionApi {
         List<dynamic> usuarios = datosRespuesta["usuarios"];
         for (int i = 0; i < usuarios.length; i++) {
           Usuario usuario = Usuario(
-            id: usuarios[i]["id"], 
-            usuario: ControladorEncriptacion.desencriptar(usuarios[i]["usuario"]),
-            contrasena: usuarios[i]["contrasena"],
-            nombre: ControladorEncriptacion.desencriptar(usuarios[i]["nombre"]), 
-            apellidos: ControladorEncriptacion.desencriptar(usuarios[i]["apellidos"]), 
-            email: ControladorEncriptacion.desencriptar(usuarios[i]["email"]), 
-            telefono: ControladorEncriptacion.desencriptar(usuarios[i]["telefono"]),
-            actualizacion: usuarios[i]["actualizacion"],
-            estado: usuarios[i]["estado"],
-            imagen: usuarios[i]["imagen"]
-          );
+              id: usuarios[i]["id"],
+              usuario:
+                  ControladorEncriptacion.desencriptar(usuarios[i]["usuario"]),
+              contrasena: usuarios[i]["contrasena"],
+              nombre:
+                  ControladorEncriptacion.desencriptar(usuarios[i]["nombre"]),
+              apellidos: ControladorEncriptacion.desencriptar(
+                  usuarios[i]["apellidos"]),
+              email: ControladorEncriptacion.desencriptar(usuarios[i]["email"]),
+              telefono:
+                  ControladorEncriptacion.desencriptar(usuarios[i]["telefono"]),
+              actualizacion: usuarios[i]["actualizacion"],
+              estado: usuarios[i]["estado"],
+              imagen: usuarios[i]["imagen"]);
           Controlador.listaUsuarios.add(usuario);
         }
       }
@@ -380,5 +371,71 @@ class ConexionApi {
     }
     // Todo ok
     return 0;
+  }
+
+  static Future<int> formacionesConInteres(int idUsuario) async {
+    String peticion = "${url}api/formaciones/$idUsuario/usuarios";
+    try {
+      // Se realiza la petición
+      final respuesta = await http.get(
+        Uri.parse(peticion),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      // Se recogen los datos
+      final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
+      Map<String, dynamic> datosRespuesta = jsonDecode(respuestaDecodificada);
+      List<dynamic> formaciones = datosRespuesta["formacionUsuarioDTOS"];
+      List<dynamic> errores = datosRespuesta["errores"];
+      if (errores.isNotEmpty) {
+        print(errores);
+        return 1;
+      } else {
+        for (int i = 0; i < formaciones.length; i++) {
+          FormacionDTO formacionDTO = FormacionDTO(
+              id: formaciones[i]["formacionDTO"]["id"],
+              titulo: formaciones[i]["formacionDTO"]["titulo"],
+              descripcion: formaciones[i]["formacionDTO"]["descripcion"],
+              intereses:
+                  getIntereses(formaciones[i]["formacionDTO"]["requisitos"]),
+              fechaInicio:
+                  DateTime.parse(formaciones[i]["formacionDTO"]["inicio"]),
+              fechaFin: DateTime.parse(formaciones[i]["formacionDTO"]["fin"]),
+              imagen: formaciones[i]["formacionDTO"]["imagen"],
+              estado: formaciones[i]["formacionDTO"]["estado"] == "ABIERTA"
+                  ? EstadoOfertas.ABIERTA
+                  : EstadoOfertas.CERRADA,
+              coste: formaciones[i]["formacionDTO"]["coste"],
+              fecha: formaciones[i]["formacionDTO"]["fecha"] == null
+                  ? null
+                  : DateTime.parse(formaciones[i]["formacionDTO"]["fecha"]));
+          FormacionUsuario formacionUsuario = FormacionUsuario(
+              formacion: formacionDTO,
+              inscrito: formaciones[i]["inscrito"],
+              interesado: formaciones[i]["interesado"]);
+          Controlador.listaFormacionesConInteres.add(formacionUsuario);
+        }
+      }
+    } catch (e) {
+      // Hubo errores en la ejecución
+      print(e);
+      return 2;
+    }
+    // Todo correcto
+    return 0;
+  }
+
+  static List<Interes> getIntereses(List<dynamic> listaIntereses) {
+    List<Interes> lista = [];
+    for (int i = 0; i < listaIntereses.length; i++) {
+      for (int x = 0; x < Controlador.listaIntereses.length; x++) {
+        if (Controlador.listaIntereses[x].id == int.parse(listaIntereses[i])) {
+          lista.add(Controlador.listaIntereses[x]);
+          break;
+        }
+      }
+    }
+    return lista;
   }
 }
