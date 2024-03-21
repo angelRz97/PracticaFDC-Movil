@@ -245,4 +245,49 @@ class ConexionApi {
     }
     return lista;
   }
+
+  /// Metodo para recuperar la lista de todos los usuarios de la bd. Devuelve un entero en función del resultado.
+  static Future<int> recuperaUsuarios() async {
+    String peticion = "${url}api/admin/usuarios/listar";
+    try {
+      // Se realiza la petición
+      final respuesta = await http.get(
+        Uri.parse(peticion),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      // Se recogen los datos
+      final respuestaDecodificada = utf8.decode(respuesta.bodyBytes);
+      Map<String, dynamic> datosRespuesta = jsonDecode(respuestaDecodificada);
+      List<dynamic> errores = datosRespuesta["errores"];
+      if (errores.isNotEmpty) {
+        // Existen errores
+        return 1;
+      } else {
+        // Se guardan las usuarios en el controlador
+        List<dynamic> usuarios = datosRespuesta["usuarios"];
+        for (int i = 0; i < usuarios.length; i++) {
+          Usuario usuario = Usuario(
+            id: usuarios[i]["id"], 
+            usuario: ControladorEncriptacion.desencriptar(usuarios[i]["usuario"]),
+            contrasena: usuarios[i]["contrasena"],
+            nombre: ControladorEncriptacion.desencriptar(usuarios[i]["nombre"]), 
+            apellidos: ControladorEncriptacion.desencriptar(usuarios[i]["apellidos"]), 
+            email: ControladorEncriptacion.desencriptar(usuarios[i]["email"]), 
+            telefono: ControladorEncriptacion.desencriptar(usuarios[i]["telefono"]),
+            actualizacion: usuarios[i]["actualizacion"],
+            estado: usuarios[i]["estado"],
+            imagen: usuarios[i]["imagen"]
+          );
+          Controlador.listaUsuarios.add(usuario);
+        }
+      }
+    } catch (e) {
+      // Error en la ejecución
+      return 2;
+    }
+    // Todo ok
+    return 0;
+  }
 }
